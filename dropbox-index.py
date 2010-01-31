@@ -21,7 +21,7 @@
 #
 
 __author__ = "Wojciech 'KosciaK' Pietrzok (kosciak@kosciak.net)"
-__version__ = "0.1"
+__version__ = "0.2"
 
 import sys
 import os
@@ -30,13 +30,125 @@ import locale
 
 locale.setlocale(locale.LC_ALL, '')
 LANG, ENCODING = locale.getlocale()
-DATE_FORMAT = '%Y-%m-%d&nbsp;&nbsp;&nbsp;%H:%M:%S'
+
+DATE_FORMAT = '%Y-%m-%d&nbsp;%H:%M:%S'
+
 TABLE_HEADERS = {'en_GB': ('Name', 'Size', 'Last Modified'),
                  'pl_PL': ('Nazwa', 'Rozmiar', 'Czas modyfikacji')}
+
 SCRIPT_WWW = 'http://code.google.com/p/kosciak-misc/wiki/DropboxInbox'
-ICON_URL = 'http://dl.dropbox.com/u/69843/dropbox-index'
-FILE_ICON_URL = '%s/file.png' % ICON_URL
-FOLDER_ICON_URL = '%s/folder.png' % ICON_URL
+
+FILES_URL = 'http://dl.dropbox.com/u/69843/dropbox-index'
+
+ICONS = (
+    '%s/icons/back.png' % FILES_URL,
+    '%s/icons/folder.png' % FILES_URL,
+    '%s/icons/file.png' % FILES_URL,
+    '%s/icons/image.png' % FILES_URL,
+    '%s/icons/video.png' % FILES_URL,
+    '%s/icons/music.png' % FILES_URL,
+    '%s/icons/archive.png' % FILES_URL,
+    '%s/icons/package.png' % FILES_URL,
+    '%s/icons/pdf.png' % FILES_URL,
+    '%s/icons/txt.png' % FILES_URL,
+    '%s/icons/markup.png' % FILES_URL,
+    '%s/icons/code.png' % FILES_URL,
+    '%s/icons/font.png' % FILES_URL,
+    '%s/icons/document.png' % FILES_URL,
+    '%s/icons/spreadsheet.png' % FILES_URL,
+    '%s/icons/presentation.png' % FILES_URL,
+    '%s/icons/application.png' % FILES_URL,
+    '%s/icons/plugin.png' % FILES_URL,
+    '%s/icons/iso.png' % FILES_URL,
+    )
+
+FILE_TYPES = {
+    ('gif', 'jpg', 'jpeg', 'png', 'bmp', 'tif', 'tiff', 'raw', 'img', 'ico', ): 'image',
+    ('avi', 'ram', 'mpg', 'mpeg', 'mov', 'asf', 'wmv', 'asx', 'ogm', 'vob', '3gp', ): 'video',
+    ('mp3', 'ogg', 'mpc', 'wav', 'wave', 'flac', 'shn', 'ape', 'mid', 'midi', 'wma', 'rm', 'aac', 'mka', ): 'music',
+    ('tar', 'bz2', 'gz', 'arj', 'rar', 'zip', '7z', ): 'archive',
+    ('deb', 'rpm', 'pkg', 'jar', 'war', 'ear', ): 'package', 
+    ('pdf', ): 'pdf',
+    ('txt', ): 'txt',
+    ('html', 'htm', 'xml', 'css', 'rss', 'yaml', 'php', 'php3', 'php4', 'php5', ): 'markup',
+    ('js', 'py', 'pl', 'java', 'c', 'h', 'cpp', 'hpp', 'sql', ): 'code',
+    ('ttf', 'otf', 'fnt', ): 'font',
+    ('doc', 'rtf', 'odt', 'abw', 'docx', 'sxw', ): 'document',
+    ('xls', 'ods', 'csv', 'sdc', 'xlsx', ): 'spreadsheet',
+    ('ppt', 'odp', 'pptx', ): 'presentation', 
+    ('exe', 'msi', 'bin', 'dmg', ): 'application',
+    ('xpi', ): 'plugin',
+    ('iso', 'nrg', ): 'iso',
+    }
+
+STYLE = '''        body { font-family: Verdana, sans-serif; font-size: 12px;}
+        a { text-decoration: none; color: #00A; }
+        a:hover { text-decoration: underline; }
+        h1 { padding: 0; margin: 0.5em auto 0.5em 1em; }
+        table { text-align: center; margin: 0 auto 0 1.5em; border-collapse: collapse; }
+        thead { border-bottom: 1px solid #555;}
+        tbody { border-bottom: 1px solid #555;}
+        tr { line-height: 1.7em; min-height: 25px; }
+        tbody tr:hover { background-color: #EEE; }
+        .name { text-align: left; width: 35em; }
+        .name a, thead .name {display: block; padding-left: 22px; }
+        .size { text-align: right; width: 7em;}
+        .date { text-align: right; width: 15em; padding-right: 0.5em;}
+        #footer { margin: 1em auto 0.5em 2em; font-size: smaller;}
+        /* Icons */
+        .dir, .back, .file { background-repeat: no-repeat; background-position: 2px 4px;}
+        .back { background-image: url('%s'); }
+        .dir { background-image: url('%s'); }
+        .file { background-image: url('%s'); }
+        .image { background-image: url('%s'); }
+        .video { background-image: url('%s'); }
+        .music { background-image: url('%s'); }
+        .archive { background-image: url('%s'); }
+        .package { background-image: url('%s'); }
+        .pdf { background-image: url('%s'); }
+        .txt { background-image: url('%s'); }
+        .markup { background-image: url('%s'); }
+        .code { background-image: url('%s'); }
+        .font { background-image: url('%s'); }
+        .document { background-image: url('%s'); }
+        .spreadsheet { background-image: url('%s'); }
+        .presentation { background-image: url('%s'); }
+        .application { background-image: url('%s'); }
+        .plugin { background-image: url('%s'); }
+        .iso { background-image: url('%s'); }''' % ICONS
+
+HTML_START = '''<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=%s"/> 
+    <title>%s</title>
+    <style>
+        %s
+    </style>
+</head>
+<body>
+'''
+HTML_HEADER = '<h1>%s</h1>'
+HTML_TABLE = '''
+<table>
+    <thead>
+        <tr>
+            <th class="name">%s</th><th class="size">%s</th><th class="date">%s</th>
+        <tr>
+    </thead>
+    <tbody>
+'''
+HTML_BACK = '<tr class="back"><td class="name"><a href="../index.html">..</a></td><td class="size">&nbsp;</td><td class="date">&nbsp;</td></tr>'
+HTML_DIR = '<tr class="dir"><td class="name"><a href="%(file_name)s/index.html">%(file_name)s</a></td><td class="size">&nbsp;</td><td class="date">%(file_time)s</td></tr>\n'
+HTML_FILE = '<tr class="file%(file_type)s"><td class="name"><a href="%(file_name)s">%(file_name)s</a></td><td class="size">%(file_size)s</td><td class="date">%(file_time)s</td></tr>\n'
+HTML_END = '''
+    </tbody>
+<table>
+<div id="footer">
+Generated on <strong>%s</strong> using <a href="%s">Dropbox-index</a>-%s</a>
+</div>
+</body>
+</html>'''
 
 
 def table_headers():
@@ -60,66 +172,39 @@ def get_size(file):
     return '%s MB' % round(float(kilo) / 1024, 1)
 
 
+def get_filetype(file_name):
+    filetype = file_name.split('.')[-1].lower()
+    for keys, value in FILE_TYPES.items():
+        if filetype in keys:
+            return ' %s' % value
+    return ''
+
+
 def html_render(path, back, dirs, files):
+    PATH = os.path.basename(os.path.realpath(path))
+    
     index = open(os.path.join(path, 'index.html'), 'w')
-    index.write('''<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=%s"/> 
-    <title>%s</title>''' % (ENCODING, os.path.basename(os.path.realpath(path))))
-    
-    index.write('''<style>
-        body { font-type: sans-serif; }
-        a { text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        table { text-align: center; margin: 0 auto 0 1.5em; border-collapse: collapse; }
-        thead { border-bottom: 1px solid #555; }
-        tr { line-height: 1.7em; min-height: 25px; }
-        tbody tr:hover { background-color: #EEE; }
-        .name { text-align: left; width: 35em; padding-left: 22px; }
-        .name a {display: block; }
-        .size { text-align: right; width: 7em;}
-        .date { text-align: right; width: 15em; padding-right: 0.5em;}
-        .dir, .back { background-image: url('%s'); background-repeat: no-repeat; background-position: 2px 4px;}
-        .file { background-image: url('%s'); background-repeat: no-repeat; background-position: 2px 4px;}
-        #footer { border-top: 1px solid #555; margin: 3em 1em 0 1em; padding: 0.5em; font-size: x-small; }
-    </style>
-</head>
-<body>\n''' % (FOLDER_ICON_URL, FILE_ICON_URL))
-    
-    index.write('<h1>%s</h1>' % os.path.basename(os.path.realpath(path)))
-    
-    index.write('''
-<table>
-    <thead>
-        <tr>
-            <th class="name">%s</th><th class="size">%s</th><th class="date">%s</th>
-        <tr>
-    </thead>
-    <tbody>\n''' % table_headers())
+    index.write(HTML_START % (ENCODING, PATH, STYLE))
+    index.write(HTML_HEADER % PATH)
+    index.write(HTML_TABLE % table_headers())
     
     if back:
-        index.write('<tr class="back"><td class="name"><a href="../index.html">..</a></td><td class="size">&nbsp;</td><td class="date">&nbsp;</td></tr>')
+        index.write(HTML_BACK)
     
     for file in dirs:
         file_name = os.path.basename(file)
         file_time = time.strftime(DATE_FORMAT, time.localtime(os.path.getmtime(file)))
-        index.write('<tr class="dir"><td class="name"><a href="%s/index.html">%s</a></td><td class="size">&nbsp;</td><td class="date">%s</td></tr>\n' % (file_name, file_name, file_time))
+        index.write(HTML_DIR % locals())
         
     for file in files:
         file_name = os.path.basename(file)
+        file_type = get_filetype(file_name)
         file_size = get_size(file)
         file_time = time.strftime(DATE_FORMAT, time.localtime(os.path.getmtime(file)))
-        index.write('<tr class="file"><td class="name"><a href="%s">%s</a></td><td class="size">%s</td><td class="date">%s</td></tr>\n' % (file_name, file_name, file_size, file_time))
+        index.write(HTML_FILE % locals())
     
-    index.write('''
-    </tbody>
-<table>
-<div id="footer">
-Generated using <a href="%s">Dropbox-index</a> %s by <a href="http://kosciak.blox.pl/">Wojciech 'KosciaK' Pietrzok</a>
-</div>
-</body>
-</html>''' % (SCRIPT_WWW, __version__))
+    now = time.strftime(DATE_FORMAT, time.localtime())
+    index.write(HTML_END % (now, SCRIPT_WWW, __version__))
     
    
 
