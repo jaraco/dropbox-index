@@ -138,9 +138,9 @@ HTML_TABLE = '''
     </thead>
     <tbody>
 '''
-HTML_BACK = '<tr class="back"><td class="name"><a href="../index.html">..</a></td><td class="size">&nbsp;</td><td class="date">&nbsp;</td></tr>'
-HTML_DIR = '<tr class="dir"><td class="name"><a href="%(file_name)s/index.html">%(file_name)s</a></td><td class="size">&nbsp;</td><td class="date">%(file_time)s</td></tr>\n'
-HTML_FILE = '<tr class="file%(file_type)s"><td class="name"><a href="%(file_name)s">%(file_name)s</a></td><td class="size">%(file_size)s</td><td class="date">%(file_time)s</td></tr>\n'
+HTML_BACK = '<tr><td class="name back"><a href="../index.html">..</a></td><td class="size">&nbsp;</td><td class="date">&nbsp;</td></tr>'
+HTML_DIR = '<tr><td class="name dir"><a href="%(file_name)s/index.html">%(file_name)s</a></td><td class="size">&nbsp;</td><td class="date">%(file_time)s</td></tr>\n'
+HTML_FILE = '<tr><td class="name file%(file_type)s"><a href="%(file_name)s">%(file_name)s</a></td><td class="size">%(file_size)s</td><td class="date">%(file_time)s</td></tr>\n'
 HTML_END = '''
     </tbody>
 <table>
