@@ -20,8 +20,8 @@
 # famfamfam's "Silk" icon set - http://www.famfamfam.com/lab/icons/silk/
 #
 
-__author__ = "Wojciech 'KosciaK' Pietrzok (kosciak@kosciak.net)"
-__version__ = "0.3"
+__author__ = "Wojciech 'KosciaK' Pietrzok (kosciak@kosciak.net), Tommy MacWilliam (macwilliamt@gmail.com)"
+__version__ = "0.4"
 
 import sys
 import os
@@ -81,24 +81,26 @@ FILE_TYPES = {
     ('iso', 'nrg', ): 'iso',
     }
 
-STYLE = '''        
+HTML_STYLE = '''
+    <style>
         body { font-family: Verdana, sans-serif; font-size: 12px;}
         a { text-decoration: none; color: #00A; }
         a:hover { text-decoration: underline; }
         h1 { padding: 0; margin: 0.5em auto 0.5em 1em; }
-        table { text-align: center; margin: 0 auto 0 1.5em; border-collapse: collapse; }
-        thead { border-bottom: 1px solid #555; }
-        th:hover { cursor: pointer; cursor: hand; background-color: #EEE; }
+        table#dropbox-index-list { text-align: center; margin: 0 auto 0 1.5em; border-collapse: collapse; }
+        #dropbox-index-list thead { border-bottom: 1px solid #555; }
+        #dropbox-index-list th:hover { cursor: pointer; cursor: hand; background-color: #EEE; }
         #direction { border: 0; vertical-align: bottom; margin: 0 0.5em;}
-        tbody { border-bottom: 1px solid #555;}
-        tr, th { line-height: 1.7em; min-height: 25px; }
-        tbody tr:hover { background-color: #EEE; }
+        #dropbox-index-list tbody { border-bottom: 1px solid #555;}
+        #dropbox-index-list tr, th { line-height: 1.7em; min-height: 25px; }
+        #dropbox-index-list tbody tr:hover { background-color: #EEE; }
         .name { text-align: left; width: 35em; }
         .name a, thead .name { padding-left: 22px; }
         .name a { display: block; }
         .size { text-align: right; width: 7em; padding-right: 1em;}
         .date { text-align: right; width: 15em; padding-right: 1em;}
-        #footer { margin: 1em auto 0.5em 2em; font-size: smaller;}
+        #dropbox-index-dir-info { margin: 1em auto 0.5em 2em; }
+        #dropbox-index-footer { margin: 1em auto 0.5em 2em; font-size: smaller;}
         /* Icons */
         .dir, .back, .file { background-repeat: no-repeat; background-position: 2px 4px;}
         .back { background-image: url('%s'); }
@@ -119,9 +121,12 @@ STYLE = '''
         .presentation { background-image: url('%s'); }
         .application { background-image: url('%s'); }
         .plugin { background-image: url('%s'); }
-        .iso { background-image: url('%s'); }''' % ICONS
+        .iso { background-image: url('%s'); }
+    </style>''' % ICONS
 
-JAVASCRIPT = '''
+HTML_JAVASCRIPT = '''
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script>
     function sort() {
         column = $(this).attr("class").split(' ')[0];
         $("#direction").remove();
@@ -172,22 +177,23 @@ JAVASCRIPT = '''
     $(document).ready(function(){
         prepare();
     });
-''' % (FILES_URL, FILES_URL)
+</script>''' % (FILES_URL, FILES_URL)
+
+HTML_FAVICON = '<link rel="shortcut icon" href="%s/icons/favicon.ico"/>' % FILES_URL
 
 HTML_START = '''<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=%s"/> 
-    <title>%s</title>
-    <link rel="shortcut icon" href="%s/icons/favicon.ico"/>
-    <style>%s</style>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-    <script>%s</script>
+    <meta http-equiv="Content-Type" content="text/html; charset=%(ENCODING)s"/> 
+    <title>%(PATH)s</title>
+    %(HTML_FAVICON)s
+    %(HTML_STYLE)s
+    %(HTML_JAVASCRIPT)s
 </head>
 <body>
 '''
 HTML_HEADER = '<h1>%s</h1>'
-HTML_TABLE = '''
+HTML_TABLE_START = '''
 <table id="dropbox-index-list">
     <thead>
         <tr>
@@ -199,12 +205,15 @@ HTML_TABLE = '''
 HTML_BACK = '<tr><td class="name back"><a href="../index.html">..</a></td><td class="size">&nbsp;</td><td class="date">&nbsp;</td></tr>'
 HTML_DIR = '<tr><td class="name dir"><a href="%(file_name)s/index.html">%(file_name)s</a></td><td class="size">&nbsp;</td><td class="date" sort="%(file_time_sort)s">%(file_time)s</td></tr>\n'
 HTML_FILE = '<tr><td class="name file%(file_type)s"><a href="%(file_name)s">%(file_name)s</a></td><td class="size" sort="%(file_size_sort)s">%(file_size)s</td><td class="date" sort="%(file_time_sort)s">%(file_time)s</td></tr>\n'
-HTML_END = '''
+HTML_TABLE_END = '''
     </tbody>
 </table>
-<div id="footer">
-Generated on <strong>%s</strong> using <a href="%s">Dropbox-index</a>-%s</a>
-</div>
+<div id="dropbox-index-footer">Generated on <strong>%s</strong> using <a href="%s">Dropbox-index</a>-%s</a></div>'''
+HTML_DIR_INFO = '''
+<div id="dropbox-index-dir-info">
+%(DIR-INFO)s
+</div>'''
+HTML_END = '''
 </body>
 </html>'''
 
@@ -238,13 +247,14 @@ def get_filetype(file_name):
     return ''
 
 
-def html_render(path, back, dirs, files):
+def html_render(path, back, dirs, files, template=None):
+    global PATH
     PATH = os.path.basename(os.path.realpath(path))
     
     index = open(os.path.join(path, 'index.html'), 'w')
-    index.write(HTML_START % (ENCODING, PATH, FILES_URL, STYLE, JAVASCRIPT))
+    index.write(HTML_START % globals())
     index.write(HTML_HEADER % PATH)
-    index.write(HTML_TABLE % table_headers())
+    index.write(HTML_TABLE_START % table_headers())
     
     if back:
         index.write(HTML_BACK)
@@ -255,8 +265,13 @@ def html_render(path, back, dirs, files):
         file_time_sort = os.path.getmtime(file)
         index.write(HTML_DIR % locals())
         
+    dir_info = None
+    
     for file in files:
         file_name = os.path.basename(file)
+        if 'dir-info' in file_name:
+            dir_info = open(file, 'r').read()
+            continue
         file_type = get_filetype(file_name)
         file_size = get_size(file)
         file_size_sort = os.path.getsize(file)
@@ -265,7 +280,12 @@ def html_render(path, back, dirs, files):
         index.write(HTML_FILE % locals())
     
     now = time.strftime(DATE_FORMAT, time.localtime())
-    index.write(HTML_END % (now, SCRIPT_WWW, __version__))
+    index.write(HTML_TABLE_END % (now, SCRIPT_WWW, __version__))
+    
+    if dir_info:
+        index.write(HTML_DIR_INFO % {'DIR-INFO': dir_info})
+    
+    index.write(HTML_END)
     
    
 
@@ -312,7 +332,12 @@ if __name__ == '__main__':
 
 Options:
   -h, --help            Show help message and exit.
-  -R, --recursive       Include subdirectories (disabled by default).\n'''
+  -R, --recursive       Include subdirectories (disabled by default).
+  -t, --template        Use HTML file as template.
+  
+ATTENTION: 
+  Script will overwrite existing index.html file(s)!
+'''
     
     if len(sys.argv) > 1:
         if sys.argv[1] in ['-h', '--help']:
