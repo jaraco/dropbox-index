@@ -86,7 +86,7 @@ HTML_STYLE = '''
         body { font-family: Verdana, sans-serif; font-size: 12px;}
         a { text-decoration: none; color: #00A; }
         a:hover { text-decoration: underline; }
-        h1 { padding: 0; margin: 0.5em auto 0.5em 1em; }
+        #dropbox-index-header { padding: 0; margin: 0.5em auto 0.5em 1em; }
         table#dropbox-index-list { text-align: center; margin: 0 auto 0 1.5em; border-collapse: collapse; }
         #dropbox-index-list thead { border-bottom: 1px solid #555; }
         #dropbox-index-list th:hover { cursor: pointer; cursor: hand; background-color: #EEE; }
@@ -179,20 +179,20 @@ HTML_JAVASCRIPT = '''
     });
 </script>''' % (FILES_URL, FILES_URL)
 
-HTML_FAVICON = '<link rel="shortcut icon" href="%s/icons/favicon.ico"/>' % FILES_URL
+FAVICON = '<link rel="shortcut icon" href="%s/icons/favicon.ico"/>' % FILES_URL
 
 HTML_START = '''<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=%(ENCODING)s"/> 
     <title>%(PATH)s</title>
-    %(HTML_FAVICON)s
+    %(FAVICON)s
     %(HTML_STYLE)s
     %(HTML_JAVASCRIPT)s
 </head>
 <body>
 '''
-HTML_HEADER = '<h1>%s</h1>'
+HTML_HEADER = '<h1 id="dropbox-index-header">%s</h1>'
 HTML_TABLE_START = '''
 <table id="dropbox-index-list">
     <thead>
@@ -247,12 +247,18 @@ def get_filetype(file_name):
     return ''
 
 
-def html_render(path, back, dirs, files, template=None):
+def html_render(path, back, dirs, files, template_file=None):
     global PATH
     PATH = os.path.basename(os.path.realpath(path))
-    
+
     index = open(os.path.join(path, 'index.html'), 'w')
-    index.write(HTML_START % globals())
+    
+    if template_file:
+        template = open(template, 'r').read()
+        
+    else:
+        index.write(HTML_START % globals())
+    
     index.write(HTML_HEADER % PATH)
     index.write(HTML_TABLE_START % table_headers())
     
@@ -282,8 +288,7 @@ def html_render(path, back, dirs, files, template=None):
     now = time.strftime(DATE_FORMAT, time.localtime())
     index.write(HTML_TABLE_END % (now, SCRIPT_WWW, __version__))
     
-    if dir_info:
-        index.write(HTML_DIR_INFO % {'DIR-INFO': dir_info})
+    index.write(HTML_DIR_INFO % {'DIR-INFO': dir_info or ''})
     
     index.write(HTML_END)
     
