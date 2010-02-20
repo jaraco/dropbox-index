@@ -21,7 +21,7 @@
 #
 
 __author__ = "Wojciech 'KosciaK' Pietrzok (kosciak@kosciak.net)"
-__version__ = "0.2"
+__version__ = "0.3"
 
 import sys
 import os
@@ -81,19 +81,23 @@ FILE_TYPES = {
     ('iso', 'nrg', ): 'iso',
     }
 
-STYLE = '''        body { font-family: Verdana, sans-serif; font-size: 12px;}
+STYLE = '''        
+        body { font-family: Verdana, sans-serif; font-size: 12px;}
         a { text-decoration: none; color: #00A; }
         a:hover { text-decoration: underline; }
         h1 { padding: 0; margin: 0.5em auto 0.5em 1em; }
         table { text-align: center; margin: 0 auto 0 1.5em; border-collapse: collapse; }
-        thead { border-bottom: 1px solid #555;}
+        thead { border-bottom: 1px solid #555; }
+        th:hover { cursor: pointer; cursor: hand; background-color: #EEE; }
+        #direction { border: 0; vertical-align: bottom; margin: 0 0.5em;}
         tbody { border-bottom: 1px solid #555;}
-        tr { line-height: 1.7em; min-height: 25px; }
+        tr, th { line-height: 1.7em; min-height: 25px; }
         tbody tr:hover { background-color: #EEE; }
         .name { text-align: left; width: 35em; }
-        .name a, thead .name {display: block; padding-left: 22px; }
-        .size { text-align: right; width: 7em;}
-        .date { text-align: right; width: 15em; padding-right: 0.5em;}
+        .name a, thead .name { padding-left: 22px; }
+        .name a { display: block; }
+        .size { text-align: right; width: 7em; padding-right: 1em;}
+        .date { text-align: right; width: 15em; padding-right: 1em;}
         #footer { margin: 1em auto 0.5em 2em; font-size: smaller;}
         /* Icons */
         .dir, .back, .file { background-repeat: no-repeat; background-position: 2px 4px;}
@@ -117,33 +121,87 @@ STYLE = '''        body { font-family: Verdana, sans-serif; font-size: 12px;}
         .plugin { background-image: url('%s'); }
         .iso { background-image: url('%s'); }''' % ICONS
 
+JAVASCRIPT = '''
+    function sort() {
+        column = $(this).attr("class").split(' ')[0];
+        $("#direction").remove();
+        if ($(this).hasClass("desc")) {
+            $("#dropbox-index-list thead tr th").each(function(i) { $(this).removeClass("asc").removeClass("desc") });
+            $(this).addClass("asc");
+            reverse = -1;
+        } else {
+            $("#dropbox-index-list thead tr th").each(function(i) { $(this).removeClass("asc").removeClass("desc") });
+            $(this).addClass("desc");
+            reverse = 1;
+        }
+        if (column == "name") {
+            $(this).append('<img src="%s/icons/'+((reverse == 1) ? 'desc' : 'asc')+'.png" id="direction" />');
+        } else {
+            $(this).prepend('<img src="%s/icons/'+((reverse == 1) ? 'desc' : 'asc')+'.png" id="direction" />');
+        }
+        rows = $("#dropbox-index-list tbody tr").detach()
+        rows.sort(function(a, b) {
+            result = $(a).data('type') - $(b).data('type')
+            if (result != 0) { return result }
+            
+            return (($(a).data(column) < $(b).data(column)) - ($(a).data(column) > $(b).data(column))) * reverse
+            
+        });
+        $("#dropbox-index-list tbody").append(rows);
+    }
+    
+    function prepare() {
+        $("#dropbox-index-list tbody tr").each(function(i) {
+            if ($(this).children(".name").hasClass("back")) {
+                $(this).data('type', 1);
+            } else if ($(this).children(".name").hasClass("dir")) {
+                $(this).data('type', 2);
+            } else {
+                $(this).data('type', 3);
+            }
+            $(this).data('name', $(this).children(".name").text().toLowerCase());
+            $(this).data('size', parseInt($(this).children(".size").attr("sort")));
+            $(this).data('date', parseInt($(this).children(".date").attr("sort")));
+        });
+        
+        $("#dropbox-index-list thead tr th").each(function(i) {
+            $(this).bind('click', sort);
+        });
+    }
+
+    $(document).ready(function(){
+        prepare();
+    });
+''' % (FILES_URL, FILES_URL)
+
 HTML_START = '''<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=%s"/> 
     <title>%s</title>
-    <style>
-        %s
-    </style>
+    <link rel="shortcut icon" href="%s/icons/favicon.ico"/>
+    <style>%s</style>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script>%s</script>
 </head>
 <body>
 '''
 HTML_HEADER = '<h1>%s</h1>'
 HTML_TABLE = '''
-<table>
+<table id="dropbox-index-list">
     <thead>
         <tr>
             <th class="name">%s</th><th class="size">%s</th><th class="date">%s</th>
-        <tr>
+        </tr>
     </thead>
     <tbody>
 '''
 HTML_BACK = '<tr><td class="name back"><a href="../index.html">..</a></td><td class="size">&nbsp;</td><td class="date">&nbsp;</td></tr>'
-HTML_DIR = '<tr><td class="name dir"><a href="%(file_name)s/index.html">%(file_name)s</a></td><td class="size">&nbsp;</td><td class="date">%(file_time)s</td></tr>\n'
-HTML_FILE = '<tr><td class="name file%(file_type)s"><a href="%(file_name)s">%(file_name)s</a></td><td class="size">%(file_size)s</td><td class="date">%(file_time)s</td></tr>\n'
+HTML_DIR = '<tr><td class="name dir"><a href="%(file_name)s/index.html">%(file_name)s</a></td><td class="size">&nbsp;</td><td class="date" sort="%(file_time_sort)s">%(file_time)s</td></tr>\n'
+HTML_FILE = '<tr><td class="name file%(file_type)s"><a href="%(file_name)s">%(file_name)s</a></td><td class="size" sort="%(file_size_sort)s">%(file_size)s</td><td class="date" sort="%(file_time_sort)s">%(file_time)s</td></tr>\n'
 HTML_END = '''
     </tbody>
-<table>
+</table>
 <div id="footer">
 Generated on <strong>%s</strong> using <a href="%s">Dropbox-index</a>-%s</a>
 </div>
@@ -184,7 +242,7 @@ def html_render(path, back, dirs, files):
     PATH = os.path.basename(os.path.realpath(path))
     
     index = open(os.path.join(path, 'index.html'), 'w')
-    index.write(HTML_START % (ENCODING, PATH, STYLE))
+    index.write(HTML_START % (ENCODING, PATH, FILES_URL, STYLE, JAVASCRIPT))
     index.write(HTML_HEADER % PATH)
     index.write(HTML_TABLE % table_headers())
     
@@ -194,13 +252,16 @@ def html_render(path, back, dirs, files):
     for file in dirs:
         file_name = os.path.basename(file)
         file_time = time.strftime(DATE_FORMAT, time.localtime(os.path.getmtime(file)))
+        file_time_sort = os.path.getmtime(file)
         index.write(HTML_DIR % locals())
         
     for file in files:
         file_name = os.path.basename(file)
         file_type = get_filetype(file_name)
         file_size = get_size(file)
+        file_size_sort = os.path.getsize(file)
         file_time = time.strftime(DATE_FORMAT, time.localtime(os.path.getmtime(file)))
+        file_time_sort = os.path.getmtime(file)
         index.write(HTML_FILE % locals())
     
     now = time.strftime(DATE_FORMAT, time.localtime())
