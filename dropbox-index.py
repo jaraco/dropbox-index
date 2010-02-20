@@ -211,7 +211,7 @@ HTML_TABLE_END = '''
 <div id="dropbox-index-footer">Generated on <strong>%s</strong> using <a href="%s">Dropbox-index</a>-%s</a></div>'''
 HTML_DIR_INFO = '''
 <div id="dropbox-index-dir-info">
-%(DIR-INFO)s
+%(DIR_INFO)s
 </div>'''
 HTML_END = '''
 </body>
@@ -254,12 +254,16 @@ def html_render(path, back, dirs, files, template_file=None):
     index = open(os.path.join(path, 'index.html'), 'w')
     
     if template_file:
-        template = open(template, 'r').read()
-        
+        template = open(template_file, 'r').read()
+        head_start = template.find('<head>') + 6
+        table_start = template.find('%(FILES)s')
+        index.write(template[0:head_start] % globals())
+        index.write(HTML_STYLE + HTML_JAVASCRIPT)
+        index.write(template[head_start:table_start] % globals())
     else:
         index.write(HTML_START % globals())
+        index.write(HTML_HEADER % PATH)
     
-    index.write(HTML_HEADER % PATH)
     index.write(HTML_TABLE_START % table_headers())
     
     if back:
@@ -288,19 +292,24 @@ def html_render(path, back, dirs, files, template_file=None):
     now = time.strftime(DATE_FORMAT, time.localtime())
     index.write(HTML_TABLE_END % (now, SCRIPT_WWW, __version__))
     
-    index.write(HTML_DIR_INFO % {'DIR-INFO': dir_info or ''})
-    
-    index.write(HTML_END)
+    if template_file:
+        global DIR_INFO
+        DIR_INFO = dir_info or ''
+        index.write(template[table_start+9:] % globals())
+        DIR_INFO = None
+    else:
+        index.write(HTML_DIR_INFO % {'DIR_INFO': dir_info or ''})
+        index.write(HTML_END)
     
    
 
-def crawl(path, back=None, recursive=False):
+def crawl(path, back=None, recursive=False, template_file=None):
     if not os.path.exists(path):
-        print 'Path %s does not exists' % path
+        print 'ERROR: Path %s does not exists' % path
         return
     
     if not os.path.isdir(path):
-        print 'Path %s is not a directory' % path
+        print 'ERROR: Path %s is not a directory' % path
         return
     
     # get contents of the directory
@@ -321,40 +330,67 @@ def crawl(path, back=None, recursive=False):
         dirs = [];
     
     # render directory contents
-    html_render(path, back, dirs, files)
+    html_render(path, back, dirs, files, template_file)
 
     print 'Created index.html for %s' % os.path.realpath(path)
 
     # crawl subdirectories
     for dir in dirs:
-        crawl(dir, path, recursive)
+        crawl(dir, path, recursive, template_file)
     
 
 
 if __name__ == '__main__':
     
     HELP = '''Usage: dropbox-index.py [options] <directory>
+Example: dropbox-index.py -R -T template.html ~/Dropbox/Public/show
 
 Options:
   -h, --help            Show help message and exit.
+  -V, --version         print version information
   -R, --recursive       Include subdirectories (disabled by default).
-  -t, --template        Use HTML file as template.
+  -T, --template <file> Use HTML file as template.
   
 ATTENTION: 
-  Script will overwrite existing index.html file(s)!
+  Script will overwrite any existing index.html file(s)!
 '''
     
-    if len(sys.argv) > 1:
-        if sys.argv[1] in ['-h', '--help']:
-            print HELP
-        elif sys.argv[1] in ['-R', '--recursive']:
-            if len(sys.argv) > 2:
-                crawl(sys.argv[2], recursive=True)
-            else:
-                print 'ERROR: No directory specified'
-                print HELP
-        else:
-            crawl(sys.argv[1])
-        
-    else:
+    if len(sys.argv) <= 1:
         print HELP
+        sys.exit()
+    
+    recursive = False
+    template_file = None
+    dir = None
+    i = 1
+    while i < len(sys.argv):
+        arg = sys.argv[i]
+        if arg in ['-h', '--help']:
+            print HELP
+            sys.exit()
+        if arg in ['-V', '--version']:
+            print 'dropbox-index version %s' % __version__
+            sys.exit()
+        elif arg in ['-R', '--recursive']:
+            recursive = True
+        elif arg in ['-T', '--recursive']:
+            try:
+                template_file = sys.argv[i+1]
+                if not os.path.isfile(template_file):
+                    print 'ERROR: No template file specified'
+                    sys.exit()
+            except:
+                print 'ERROR: No template file specified'
+                sys.exit()
+            i += 1
+        else:
+            dir = arg
+        
+        i += 1
+        
+    if dir:
+        crawl(path=dir, 
+              recursive=recursive, 
+              template_file=template_file)
+    else:
+        print 'ERROR: No directory specified'
