@@ -184,7 +184,7 @@ FAVICON = '<link rel="shortcut icon" href="%s/icons/favicon.ico"/>' % FILES_URL
 HTML_START = '''<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=%(ENCODING)s"/> 
+    <meta http-equiv="Content-Type" content="text/html; charset="%(ENCODING)s"/> 
     <title>%(PATH)s</title>
     %(FAVICON)s
     %(HTML_STYLE)s
