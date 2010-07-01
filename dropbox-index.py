@@ -21,7 +21,7 @@
 #
 
 __author__ = "Wojciech 'KosciaK' Pietrzok (kosciak@kosciak.net), Tommy MacWilliam (macwilliamt@gmail.com)"
-__version__ = "0.4"
+__version__ = "0.4.1"
 
 import sys
 import os
@@ -36,7 +36,7 @@ DATE_FORMAT = '%Y-%m-%d&nbsp;%H:%M:%S'
 TABLE_HEADERS = {'en_GB': ('Name', 'Size', 'Last Modified'),
                  'pl_PL': ('Nazwa', 'Rozmiar', 'Czas modyfikacji')}
 
-SCRIPT_WWW = 'http://code.google.com/p/kosciak-misc/wiki/DropboxInbox'
+SCRIPT_WWW = 'http://code.google.com/p/kosciak-misc/wiki/DropboxIndex'
 
 FILES_URL = 'http://dl.dropbox.com/u/69843/dropbox-index'
 
