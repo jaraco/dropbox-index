@@ -21,12 +21,14 @@
 #
 
 __author__ = "Wojciech 'KosciaK' Pietrzok (kosciak@kosciak.net), Tommy MacWilliam (macwilliamt@gmail.com)"
-__version__ = "0.4.1"
+__version__ = "0.4.2"
 
 import sys
 import os
 import time
 import locale
+from optparse import OptionParser
+
 
 locale.setlocale(locale.LC_ALL, '')
 LANG, ENCODING = locale.getlocale()
@@ -340,57 +342,29 @@ def crawl(path, back=None, recursive=False, template_file=None):
     
 
 
-if __name__ == '__main__':
-    
-    HELP = '''Usage: dropbox-index.py [options] <directory>
-Example: dropbox-index.py -R -T template.html ~/Dropbox/Public/show
+def run():
 
-Options:
-  -h, --help            Show help message and exit.
-  -V, --version         print version information
-  -R, --recursive       Include subdirectories (disabled by default).
-  -T, --template <file> Use HTML file as template.
-  
-ATTENTION: 
-  Script will overwrite any existing index.html file(s)!
-'''
+    epilog = '''ATTENTION: 
+Script will overwrite any existing index.html file(s)!
+    '''
+
+    parser = OptionParser(version='%prog ' + __version__,
+                          epilog=epilog)
+    parser.add_option('-R', '--recursive', 
+                      action='store_true', default=False,
+                      help='Include subdirectories [default: %default]')
+    parser.add_option('-T', '--template', 
+                      help='Use HTML file as template')
     
-    if len(sys.argv) <= 1:
-        print HELP
+    options, args = parser.parse_args()
+    if not args:
+        parser.print_help()
         sys.exit()
     
-    recursive = False
-    template_file = None
-    dir = None
-    i = 1
-    while i < len(sys.argv):
-        arg = sys.argv[i]
-        if arg in ['-h', '--help']:
-            print HELP
-            sys.exit()
-        if arg in ['-V', '--version']:
-            print 'dropbox-index version %s' % __version__
-            sys.exit()
-        elif arg in ['-R', '--recursive']:
-            recursive = True
-        elif arg in ['-T', '--recursive']:
-            try:
-                template_file = sys.argv[i+1]
-                if not os.path.isfile(template_file):
-                    print 'ERROR: No template file specified'
-                    sys.exit()
-            except:
-                print 'ERROR: No template file specified'
-                sys.exit()
-            i += 1
-        else:
-            dir = arg
-        
-        i += 1
-        
-    if dir:
-        crawl(path=dir, 
-              recursive=recursive, 
-              template_file=template_file)
-    else:
-        print 'ERROR: No directory specified'
+    crawl(path=args[0], 
+          recursive=options.recursive, 
+          template_file=options.template)
+
+if __name__ == '__main__':
+    run()
+
