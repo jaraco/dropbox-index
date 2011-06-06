@@ -21,7 +21,7 @@
 #
 
 __author__ = "Wojciech 'KosciaK' Pietrzok (kosciak@kosciak.net), Tommy MacWilliam (macwilliamt@gmail.com)"
-__version__ = "0.4.2"
+__version__ = "0.4.3"
 
 import sys
 import os
@@ -349,6 +349,7 @@ Script will overwrite any existing index.html file(s)!
     '''
 
     parser = OptionParser(version='%prog ' + __version__,
+                          usage="%prog [options] DIRECTORY",
                           epilog=epilog)
     parser.add_option('-R', '--recursive', 
                       action='store_true', default=False,
