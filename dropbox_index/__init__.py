@@ -69,7 +69,7 @@ FILE_TYPES = {
     ('avi', 'ram', 'mpg', 'mpeg', 'mov', 'asf', 'wmv', 'asx', 'ogm', 'vob', '3gp', ): 'video',
     ('mp3', 'ogg', 'mpc', 'wav', 'wave', 'flac', 'shn', 'ape', 'mid', 'midi', 'wma', 'rm', 'aac', 'mka', ): 'music',
     ('tar', 'bz2', 'gz', 'arj', 'rar', 'zip', '7z', ): 'archive',
-    ('deb', 'rpm', 'pkg', 'jar', 'war', 'ear', ): 'package', 
+    ('deb', 'rpm', 'pkg', 'jar', 'war', 'ear', ): 'package',
     ('pdf', ): 'pdf',
     ('txt', ): 'txt',
     ('html', 'htm', 'xml', 'css', 'rss', 'yaml', 'php', 'php3', 'php4', 'php5', ): 'markup',
@@ -77,7 +77,7 @@ FILE_TYPES = {
     ('ttf', 'otf', 'fnt', ): 'font',
     ('doc', 'rtf', 'odt', 'abw', 'docx', 'sxw', ): 'document',
     ('xls', 'ods', 'csv', 'sdc', 'xlsx', ): 'spreadsheet',
-    ('ppt', 'odp', 'pptx', ): 'presentation', 
+    ('ppt', 'odp', 'pptx', ): 'presentation',
     ('exe', 'msi', 'bin', 'dmg', ): 'application',
     ('xpi', ): 'plugin',
     ('iso', 'nrg', ): 'iso',
@@ -150,13 +150,13 @@ HTML_JAVASCRIPT = '''
         rows.sort(function(a, b) {
             result = $(a).data('type') - $(b).data('type')
             if (result != 0) { return result }
-            
+
             return (($(a).data(column) < $(b).data(column)) - ($(a).data(column) > $(b).data(column))) * reverse
-            
+
         });
         $("#dropbox-index-list tbody").append(rows);
     }
-    
+
     function prepare() {
         $("#dropbox-index-list tbody tr").each(function(i) {
             if ($(this).children(".name").hasClass("back")) {
@@ -170,7 +170,7 @@ HTML_JAVASCRIPT = '''
             $(this).data('size', parseInt($(this).children(".size").attr("sort")));
             $(this).data('date', parseInt($(this).children(".date").attr("sort")));
         });
-        
+
         $("#dropbox-index-list thead tr th").each(function(i) {
             $(this).bind('click', sort);
         });
@@ -186,7 +186,7 @@ FAVICON = '<link rel="shortcut icon" href="%s/icons/favicon.ico"/>' % FILES_URL
 HTML_START = '''<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset="%(ENCODING)s"/> 
+    <meta http-equiv="Content-Type" content="text/html; charset="%(ENCODING)s"/>
     <title>%(PATH)s</title>
     %(FAVICON)s
     %(HTML_STYLE)s
@@ -225,18 +225,18 @@ def table_headers():
         return TABLE_HEADERS[LANG]
     else:
         return TABLE_HEADERS['en_GB']
-    
+
 
 def get_size(file):
     size = os.path.getsize(file)
-    
+
     if size < 1000:
         return '%s bytes' % size
-    
+
     kilo = size / 1024
     if kilo < 1000:
         return '%s KB' % round(float(size) / 1024, 1)
-    
+
     mega = kilo / 1024
     return '%s MB' % round(float(kilo) / 1024, 1)
 
@@ -254,7 +254,7 @@ def html_render(path, back, dirs, files, template_file=None):
     PATH = os.path.basename(os.path.realpath(path))
 
     index = open(os.path.join(path, 'index.html'), 'w')
-    
+
     if template_file:
         template = open(template_file, 'r').read()
         head_start = template.find('<head>') + 6
@@ -265,20 +265,20 @@ def html_render(path, back, dirs, files, template_file=None):
     else:
         index.write(HTML_START % globals())
         index.write(HTML_HEADER % PATH)
-    
+
     index.write(HTML_TABLE_START % table_headers())
-    
+
     if back:
         index.write(HTML_BACK)
-    
+
     for file in dirs:
         file_name = os.path.basename(file)
         file_time = time.strftime(DATE_FORMAT, time.localtime(os.path.getmtime(file)))
         file_time_sort = os.path.getmtime(file)
         index.write(HTML_DIR % locals())
-        
+
     dir_info = None
-    
+
     for file in files:
         file_name = os.path.basename(file)
         if 'dir-info' in file_name:
@@ -290,10 +290,10 @@ def html_render(path, back, dirs, files, template_file=None):
         file_time = time.strftime(DATE_FORMAT, time.localtime(os.path.getmtime(file)))
         file_time_sort = os.path.getmtime(file)
         index.write(HTML_FILE % locals())
-    
+
     now = time.strftime(DATE_FORMAT, time.localtime())
     index.write(HTML_TABLE_END % (now, SCRIPT_WWW, __version__))
-    
+
     if template_file:
         global DIR_INFO
         DIR_INFO = dir_info or ''
@@ -302,35 +302,35 @@ def html_render(path, back, dirs, files, template_file=None):
     else:
         index.write(HTML_DIR_INFO % {'DIR_INFO': dir_info or ''})
         index.write(HTML_END)
-    
-   
+
+
 
 def crawl(path, back=None, recursive=False, template_file=None):
     if not os.path.exists(path):
         print 'ERROR: Path %s does not exists' % path
         return
-    
+
     if not os.path.isdir(path):
         print 'ERROR: Path %s is not a directory' % path
         return
-    
+
     # get contents of the directory
     contents = [os.path.join(path, file) for file in os.listdir(path) if not file.endswith('index.html')]
     # remove hidden files
     # TODO: identify Windows hidden files
     contents = [file for file in contents if not os.path.basename(file).startswith('.')]
-    
+
     # get only files
     files = [file for file in contents if os.path.isfile(file)]
     files.sort(key=str.lower)
-    
+
     # get only directories
     if recursive:
         dirs = [file for file in contents if os.path.isdir(file)]
         dirs.sort(key=str.lower)
     else:
         dirs = [];
-    
+
     # render directory contents
     html_render(path, back, dirs, files, template_file)
 
@@ -339,31 +339,31 @@ def crawl(path, back=None, recursive=False, template_file=None):
     # crawl subdirectories
     for dir in dirs:
         crawl(dir, path, recursive, template_file)
-    
+
 
 
 def run():
 
-    epilog = '''ATTENTION: 
+    epilog = '''ATTENTION:
 Script will overwrite any existing index.html file(s)!
     '''
 
     parser = OptionParser(version='%prog ' + __version__,
                           usage="%prog [options] DIRECTORY",
                           epilog=epilog)
-    parser.add_option('-R', '--recursive', 
+    parser.add_option('-R', '--recursive',
                       action='store_true', default=False,
                       help='Include subdirectories [default: %default]')
-    parser.add_option('-T', '--template', 
+    parser.add_option('-T', '--template',
                       help='Use HTML file as template')
-    
+
     options, args = parser.parse_args()
     if not args:
         parser.print_help()
         sys.exit()
-    
-    crawl(path=args[0], 
-          recursive=options.recursive, 
+
+    crawl(path=args[0],
+          recursive=options.recursive,
           template_file=options.template)
 
 if __name__ == '__main__':
