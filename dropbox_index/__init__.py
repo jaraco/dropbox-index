@@ -20,15 +20,15 @@
 # famfamfam's "Silk" icon set - http://www.famfamfam.com/lab/icons/silk/
 #
 
-__author__ = "Wojciech 'KosciaK' Pietrzok (kosciak@kosciak.net), Tommy MacWilliam (macwilliamt@gmail.com)"
-__version__ = "0.4.3"
-
 import sys
 import os
 import time
 import locale
 from optparse import OptionParser
 
+
+__author__ = "Wojciech 'KosciaK' Pietrzok (kosciak@kosciak.net), Tommy MacWilliam (macwilliamt@gmail.com)"
+__version__ = "0.4.3"
 
 locale.setlocale(locale.LC_ALL, '')
 LANG, ENCODING = locale.getlocale()
