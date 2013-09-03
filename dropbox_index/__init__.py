@@ -232,6 +232,12 @@ def table_headers():
 def get_size(file):
     size = os.path.getsize(file)
 
+    return size_text(size)
+
+def size_text(size):
+    """
+    Return a nice human-readable text for the size.
+    """
     if size < 1000:
         return '%s bytes' % size
 
