@@ -20,6 +20,8 @@
 # famfamfam's "Silk" icon set - http://www.famfamfam.com/lab/icons/silk/
 #
 
+from __future__ import print_function
+
 import sys
 import os
 import time
@@ -307,11 +309,11 @@ def html_render(path, back, dirs, files, template_file=None):
 
 def crawl(path, back=None, recursive=False, template_file=None):
     if not os.path.exists(path):
-        print 'ERROR: Path %s does not exists' % path
+        print('ERROR: Path %s does not exists' % path)
         return
 
     if not os.path.isdir(path):
-        print 'ERROR: Path %s is not a directory' % path
+        print('ERROR: Path %s is not a directory' % path)
         return
 
     # get contents of the directory
@@ -334,7 +336,7 @@ def crawl(path, back=None, recursive=False, template_file=None):
     # render directory contents
     html_render(path, back, dirs, files, template_file)
 
-    print 'Created index.html for %s' % os.path.realpath(path)
+    print('Created index.html for %s' % os.path.realpath(path))
 
     # crawl subdirectories
     for dir in dirs:
