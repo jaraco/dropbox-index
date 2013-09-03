@@ -18,13 +18,14 @@ setup(
     keywords='dropbox',
     classifiers=[
         "Development Status :: 4 - Beta",
-        "Programming Language :: Python",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
         "Environment :: Console",
         "Topic :: Utilities",
         "License :: OSI Approved :: Apache Software License",
     ],
-    packages=find_packages(exclude=['ez_setup', 
+    packages=find_packages(exclude=['ez_setup',
                                     'tests', 'tests.*'
                                     'examples', 'examples.*']),
     entry_points={
