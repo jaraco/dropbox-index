@@ -237,6 +237,15 @@ def get_size(file):
 def size_text(size):
     """
     Return a nice human-readable text for the size.
+
+    >>> print(size_text(50))
+    50 bytes
+
+    >>> print(size_text(5120))
+    5.0 KB
+
+    >>> print(size_text(5242880))
+    5.0 MB
     """
     if size < 1000:
         return '%s bytes' % size
