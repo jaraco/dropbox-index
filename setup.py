@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-#from distutils.core import setup, find_packages
 from setuptools import setup, find_packages
 
 import dropbox_index
@@ -33,7 +32,6 @@ setup_params = dict(
             'dropbox-index = dropbox_index:run',
         ],
     },
-    #scripts = ['bin/dropbox-index'],
 )
 
 if __name__ == '__main__':
