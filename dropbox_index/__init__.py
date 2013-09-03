@@ -306,7 +306,6 @@ def html_render(path, back, dirs, files, template_file=None):
         index.write(HTML_END)
 
 
-
 def crawl(path, back=None, recursive=False, template_file=None):
     if not os.path.exists(path):
         print('ERROR: Path %s does not exists' % path)
@@ -331,7 +330,7 @@ def crawl(path, back=None, recursive=False, template_file=None):
         dirs = [file for file in contents if os.path.isdir(file)]
         dirs.sort(key=str.lower)
     else:
-        dirs = [];
+        dirs = []
 
     # render directory contents
     html_render(path, back, dirs, files, template_file)
@@ -341,7 +340,6 @@ def crawl(path, back=None, recursive=False, template_file=None):
     # crawl subdirectories
     for dir in dirs:
         crawl(dir, path, recursive, template_file)
-
 
 
 def run():
@@ -370,4 +368,3 @@ Script will overwrite any existing index.html file(s)!
 
 if __name__ == '__main__':
     run()
-
