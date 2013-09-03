@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 import dropbox_index
 
 
-setup(
+setup_params = dict(
     name='dropbox-index',
     version=dropbox_index.__version__,
     author="Wojciech 'KosciaK' Pietrzok",
@@ -36,3 +36,5 @@ setup(
     #scripts = ['bin/dropbox-index'],
 )
 
+if __name__ == '__main__':
+    setup(**setup_params)
