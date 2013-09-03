@@ -20,7 +20,7 @@
 # famfamfam's "Silk" icon set - http://www.famfamfam.com/lab/icons/silk/
 #
 
-from __future__ import print_function
+from __future__ import print_function, division
 
 import sys
 import os
@@ -243,10 +243,10 @@ def size_text(size):
 
     kilo = size / 1024
     if kilo < 1000:
-        return '%s KB' % round(float(size) / 1024, 1)
+        return '%s KB' % round(size / 1024, 1)
 
     mega = kilo / 1024
-    return '%s MB' % round(float(kilo) / 1024, 1)
+    return '%s MB' % round(kilo / 1024, 1)
 
 
 def get_filetype(file_name):
