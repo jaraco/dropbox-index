@@ -252,10 +252,10 @@ def size_text(size):
 
     kilo = size / 1024
     if kilo < 1000:
-        return '%s KB' % round(size / 1024, 1)
+        return '%s KB' % round(kilo, 1)
 
     mega = kilo / 1024
-    return '%s MB' % round(kilo / 1024, 1)
+    return '%s MB' % round(mega, 1)
 
 
 def get_filetype(file_name):
