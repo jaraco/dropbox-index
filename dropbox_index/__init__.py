@@ -30,7 +30,7 @@ from optparse import OptionParser
 
 
 __author__ = "Wojciech 'KosciaK' Pietrzok (kosciak@kosciak.net), Tommy MacWilliam (macwilliamt@gmail.com)"
-__version__ = "0.4.3"
+__version__ = "0.5.0"
 
 locale.setlocale(locale.LC_ALL, '')
 LANG, ENCODING = locale.getlocale()
