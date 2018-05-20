@@ -48,6 +48,8 @@ Authors
 
 Changelog
 
+0.5.0 * Added support for Python 3
+
 0.4.3 * just a quick minor bugfix
 
 0.4.2 * nothing has changed in how the scripts works but... * added easy_install / pip support and uploaded package to PyPI * using optparse for commandline options
