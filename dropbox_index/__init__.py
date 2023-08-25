@@ -3,7 +3,6 @@ Icons used:
 famfamfam's "Silk" icon set - http://www.famfamfam.com/lab/icons/silk/
 """
 
-from __future__ import print_function, division
 
 import sys
 import os
@@ -221,57 +220,57 @@ HTML_STYLE = (
 HTML_JAVASCRIPT = '''
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script>
-    function sort() {
+    function sort() {{
         column = $(this).attr("class").split(' ')[0];
         $("#direction").remove();
-        if ($(this).hasClass("desc")) {
-            $("#dropbox-index-list thead tr th").each(function(i) { $(this).removeClass("asc").removeClass("desc") });
+        if ($(this).hasClass("desc")) {{
+            $("#dropbox-index-list thead tr th").each(function(i) {{ $(this).removeClass("asc").removeClass("desc") }});
             $(this).addClass("asc");
             reverse = -1;
-        } else {
-            $("#dropbox-index-list thead tr th").each(function(i) { $(this).removeClass("asc").removeClass("desc") });
+        }} else {{
+            $("#dropbox-index-list thead tr th").each(function(i) {{ $(this).removeClass("asc").removeClass("desc") }});
             $(this).addClass("desc");
             reverse = 1;
-        }
-        if (column == "name") {
-            $(this).append('<img src="%s/icons/'+((reverse == 1) ? 'desc' : 'asc')+'.png" id="direction" />');
-        } else {
-            $(this).prepend('<img src="%s/icons/'+((reverse == 1) ? 'desc' : 'asc')+'.png" id="direction" />');
-        }
+        }}
+        if (column == "name") {{
+            $(this).append('<img src="{}/icons/'+((reverse == 1) ? 'desc' : 'asc')+'.png" id="direction" />');
+        }} else {{
+            $(this).prepend('<img src="{}/icons/'+((reverse == 1) ? 'desc' : 'asc')+'.png" id="direction" />');
+        }}
         rows = $("#dropbox-index-list tbody tr").detach()
-        rows.sort(function(a, b) {
+        rows.sort(function(a, b) {{
             result = $(a).data('type') - $(b).data('type')
-            if (result != 0) { return result }
+            if (result != 0) {{ return result }}
 
             return (($(a).data(column) < $(b).data(column)) - ($(a).data(column) > $(b).data(column))) * reverse
 
-        });
+        }});
         $("#dropbox-index-list tbody").append(rows);
-    }
+    }}
 
-    function prepare() {
-        $("#dropbox-index-list tbody tr").each(function(i) {
-            if ($(this).children(".name").hasClass("back")) {
+    function prepare() {{
+        $("#dropbox-index-list tbody tr").each(function(i) {{
+            if ($(this).children(".name").hasClass("back")) {{
                 $(this).data('type', 1);
-            } else if ($(this).children(".name").hasClass("dir")) {
+            }} else if ($(this).children(".name").hasClass("dir")) {{
                 $(this).data('type', 2);
-            } else {
+            }} else {{
                 $(this).data('type', 3);
-            }
+            }}
             $(this).data('name', $(this).children(".name").text().toLowerCase());
             $(this).data('size', parseInt($(this).children(".size").attr("sort")));
             $(this).data('date', parseInt($(this).children(".date").attr("sort")));
-        });
+        }});
 
-        $("#dropbox-index-list thead tr th").each(function(i) {
+        $("#dropbox-index-list thead tr th").each(function(i) {{
             $(this).bind('click', sort);
-        });
-    }
+        }});
+    }}
 
-    $(document).ready(function(){
+    $(document).ready(function(){{
         prepare();
-    });
-</script>''' % (
+    }});
+</script>'''.format(
     FILES_URL,
     FILES_URL,
 )
@@ -367,7 +366,7 @@ def html_render(path, back, dirs, files, template_file=None):
     index = open(os.path.join(path, 'index.html'), 'w')
 
     if template_file:
-        template = open(template_file, 'r').read()
+        template = open(template_file).read()
         head_start = template.find('<head>') + 6
         table_start = template.find('%(FILES)s')
         index.write(template[0:head_start] % globals())
@@ -393,7 +392,7 @@ def html_render(path, back, dirs, files, template_file=None):
     for file in files:
         file_name = os.path.basename(file)
         if 'dir-info' in file_name:
-            dir_info = open(file, 'r').read()
+            dir_info = open(file).read()
             continue
         file_type = get_filetype(file_name)
         file_size = get_size(file)
