@@ -1,3 +1,26 @@
+.. image:: https://img.shields.io/pypi/v/dropbox-index.svg
+   :target: https://pypi.org/project/dropbox-index
+
+.. image:: https://img.shields.io/pypi/pyversions/dropbox-index.svg
+
+.. image:: https://github.com/jaraco/dropbox-index/workflows/tests/badge.svg
+   :target: https://github.com/jaraco/dropbox-index/actions?query=workflow%3A%22tests%22
+   :alt: tests
+
+.. image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json
+    :target: https://github.com/astral-sh/ruff
+    :alt: Ruff
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/psf/black
+   :alt: Code style: Black
+
+.. .. image:: https://readthedocs.org/projects/PROJECT_RTD/badge/?version=latest
+..    :target: https://PROJECT_RTD.readthedocs.io/en/latest/?badge=latest
+
+.. image:: https://img.shields.io/badge/skeleton-2023-informational
+   :target: https://blog.jaraco.com/skeleton
+
 Introduction
 
 Creates index.html for directory contents shared publicly on Dropbox. That way you can easily share whole content of the directory without the need to send separate links for all the shared files.
@@ -45,23 +68,3 @@ Authors
 
     Wojciech 'KosciaK' Pietrzok
     Tommy MacWilliam - introduced template system
-
-Changelog
-
-0.5.0 * Added support for Python 3
-
-0.4.3 * just a quick minor bugfix
-
-0.4.2 * nothing has changed in how the scripts works but... * added easy_install / pip support and uploaded package to PyPI * using optparse for commandline options
-
-0.4.1 * minor bugfix - fixed invalid script's homepage url (thanks RooToor!)
-
-0.4 * added template system
-
-0.3 * added sorting of files using jQuery * added dir-info
-
-0.2.1 * small bugfix for Chrome browser
-
-0.2 * code cleanup * CSS tweaks * filetype recognition and different icons for different filetypes groups
-
-0.1 * initial release
