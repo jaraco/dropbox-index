@@ -253,11 +253,7 @@ def crawl(path, back=None, recursive=False, template_file=None):
     files.sort(key=str.lower)
 
     # get only directories
-    if recursive:
-        dirs = [file for file in contents if os.path.isdir(file)]
-        dirs.sort(key=str.lower)
-    else:
-        dirs = []
+    dirs = sorted(filter(os.path.isdir, contents), key=str.lower) * recursive
 
     # render directory contents
     html_render(path, back, dirs, files, template_file)
