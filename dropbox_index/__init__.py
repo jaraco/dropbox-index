@@ -5,6 +5,8 @@ famfamfam's "Silk" icon set - http://www.famfamfam.com/lab/icons/silk/
 
 
 import os
+import os.path
+import re
 import time
 import locale
 import argparse
@@ -49,127 +51,16 @@ ICONS = (
     '%s/icons/iso.png' % FILES_URL,
 )
 
-FILE_TYPES = {
-    (
-        'gif',
-        'jpg',
-        'jpeg',
-        'png',
-        'bmp',
-        'tif',
-        'tiff',
-        'raw',
-        'img',
-        'ico',
-    ): 'image',
-    (
-        'avi',
-        'ram',
-        'mpg',
-        'mpeg',
-        'mov',
-        'asf',
-        'wmv',
-        'asx',
-        'ogm',
-        'vob',
-        '3gp',
-    ): 'video',
-    (
-        'mp3',
-        'ogg',
-        'mpc',
-        'wav',
-        'wave',
-        'flac',
-        'shn',
-        'ape',
-        'mid',
-        'midi',
-        'wma',
-        'rm',
-        'aac',
-        'mka',
-    ): 'music',
-    (
-        'tar',
-        'bz2',
-        'gz',
-        'arj',
-        'rar',
-        'zip',
-        '7z',
-    ): 'archive',
-    (
-        'deb',
-        'rpm',
-        'pkg',
-        'jar',
-        'war',
-        'ear',
-    ): 'package',
-    ('pdf',): 'pdf',
-    ('txt',): 'txt',
-    (
-        'html',
-        'htm',
-        'xml',
-        'css',
-        'rss',
-        'yaml',
-        'php',
-        'php3',
-        'php4',
-        'php5',
-    ): 'markup',
-    (
-        'js',
-        'py',
-        'pl',
-        'java',
-        'c',
-        'h',
-        'cpp',
-        'hpp',
-        'sql',
-    ): 'code',
-    (
-        'ttf',
-        'otf',
-        'fnt',
-    ): 'font',
-    (
-        'doc',
-        'rtf',
-        'odt',
-        'abw',
-        'docx',
-        'sxw',
-    ): 'document',
-    (
-        'xls',
-        'ods',
-        'csv',
-        'sdc',
-        'xlsx',
-    ): 'spreadsheet',
-    (
-        'ppt',
-        'odp',
-        'pptx',
-    ): 'presentation',
-    (
-        'exe',
-        'msi',
-        'bin',
-        'dmg',
-    ): 'application',
-    ('xpi',): 'plugin',
-    (
-        'iso',
-        'nrg',
-    ): 'iso',
-}
+
+def _load_file_types():
+    with resources.files().joinpath('types.txt').open(encoding='utf-8') as stream:
+        for line in stream:
+            type, _, exts = line.partition(':')
+            for ext in re.findall(r'\w+', exts):
+                yield ext, type
+
+
+FILE_TYPES = dict(_load_file_types())
 
 HTML_STYLE = (
     resources.files().joinpath('style.html').read_text(encoding='utf-8') % ICONS
@@ -279,11 +170,11 @@ def size_text(size):
 
 
 def get_filetype(file_name):
-    filetype = file_name.split('.')[-1].lower()
-    for keys, value in FILE_TYPES.items():
-        if filetype in keys:
-            return ' %s' % value
-    return ''
+    ext = os.path.splitext(file_name)[-1].lower()
+    try:
+        return ' %s' % FILE_TYPES[ext]
+    except KeyError:
+        return ''
 
 
 def html_render(path, back, dirs, files, template_file=None):

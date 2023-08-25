@@ -1,0 +1,16 @@
+image: gif jpg jpeg png bmp tif tiff raw img ico
+video: avi ram mpg mpeg mov asf wmv asx ogm vob 3gp
+music: mp3 ogg mpc wav wave flac shn ape mid midi wma rm aac mka
+archive: tar bz2 gz arj rar zip 7z
+package: deb rpm pkg jar war ear
+pdf: pdf
+txt: txt
+markup: html htm xml css rss yaml php php3 php4 php5
+code: js py pl java c h cpp hpp sql
+font: ttf otf fnt
+document: doc rtf odt abw docx sxw
+spreadsheet: xls ods csv sdc xlsx
+presentation: ppt odp pptx
+application: exe msi bin dmg
+plugin: xpi
+iso: iso nrg
