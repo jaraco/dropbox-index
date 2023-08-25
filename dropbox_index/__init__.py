@@ -178,9 +178,11 @@ HTML_STYLE = (
         a { text-decoration: none; color: #00A; }
         a:hover { text-decoration: underline; }
         #dropbox-index-header { padding: 0; margin: 0.5em auto 0.5em 1em; }
-        table#dropbox-index-list { text-align: center; margin: 0 auto 0 1.5em; border-collapse: collapse; }
+        table#dropbox-index-list {
+            text-align: center; margin: 0 auto 0 1.5em; border-collapse: collapse; }
         #dropbox-index-list thead { border-bottom: 1px solid #555; }
-        #dropbox-index-list th:hover { cursor: pointer; cursor: hand; background-color: #EEE; }
+        #dropbox-index-list th:hover {
+            cursor: pointer; cursor: hand; background-color: #EEE; }
         #direction { border: 0; vertical-align: bottom; margin: 0 0.5em;}
         #dropbox-index-list tbody { border-bottom: 1px solid #555;}
         #dropbox-index-list tr, th { line-height: 1.7em; min-height: 25px; }
@@ -193,7 +195,8 @@ HTML_STYLE = (
         #dropbox-index-dir-info { margin: 1em auto 0.5em 2em; }
         #dropbox-index-footer { margin: 1em auto 0.5em 2em; font-size: smaller;}
         /* Icons */
-        .dir, .back, .file { background-repeat: no-repeat; background-position: 2px 4px;}
+        .dir, .back, .file {
+            background-repeat: no-repeat; background-position: 2px 4px;}
         .back { background-image: url('%s'); }
         .dir { background-image: url('%s'); }
         .file { background-image: url('%s'); }
@@ -224,25 +227,30 @@ HTML_JAVASCRIPT = '''
         column = $(this).attr("class").split(' ')[0];
         $("#direction").remove();
         if ($(this).hasClass("desc")) {{
-            $("#dropbox-index-list thead tr th").each(function(i) {{ $(this).removeClass("asc").removeClass("desc") }});
+            $("#dropbox-index-list thead tr th").each(function(i) {{
+                $(this).removeClass("asc").removeClass("desc") }});
             $(this).addClass("asc");
             reverse = -1;
         }} else {{
-            $("#dropbox-index-list thead tr th").each(function(i) {{ $(this).removeClass("asc").removeClass("desc") }});
+            $("#dropbox-index-list thead tr th").each(function(i) {{
+                $(this).removeClass("asc").removeClass("desc") }});
             $(this).addClass("desc");
             reverse = 1;
         }}
         if (column == "name") {{
-            $(this).append('<img src="{}/icons/'+((reverse == 1) ? 'desc' : 'asc')+'.png" id="direction" />');
+            $(this).append('<img src="{}/icons/'
+                +((reverse == 1) ? 'desc' : 'asc')+'.png" id="direction" />');
         }} else {{
-            $(this).prepend('<img src="{}/icons/'+((reverse == 1) ? 'desc' : 'asc')+'.png" id="direction" />');
+            $(this).prepend('<img src="{}/icons/'+((reverse == 1) ? 'desc' : 'asc')
+                +'.png" id="direction" />');
         }}
         rows = $("#dropbox-index-list tbody tr").detach()
         rows.sort(function(a, b) {{
             result = $(a).data('type') - $(b).data('type')
             if (result != 0) {{ return result }}
 
-            return (($(a).data(column) < $(b).data(column)) - ($(a).data(column) > $(b).data(column))) * reverse
+            return (($(a).data(column) < $(b).data(column)) - ($(a).data(column)
+                > $(b).data(column))) * reverse
 
         }});
         $("#dropbox-index-list tbody").append(rows);
@@ -298,13 +306,26 @@ HTML_TABLE_START = '''
     </thead>
     <tbody>
 '''
-HTML_BACK = '<tr><td class="name back"><a href="../index.html">..</a></td><td class="size">&nbsp;</td><td class="date">&nbsp;</td></tr>'
-HTML_DIR = '<tr><td class="name dir"><a href="%(file_name)s/index.html">%(file_name)s</a></td><td class="size">&nbsp;</td><td class="date" sort="%(file_time_sort)s">%(file_time)s</td></tr>\n'
-HTML_FILE = '<tr><td class="name file%(file_type)s"><a href="%(file_name)s">%(file_name)s</a></td><td class="size" sort="%(file_size_sort)s">%(file_size)s</td><td class="date" sort="%(file_time_sort)s">%(file_time)s</td></tr>\n'
+HTML_BACK = (
+    '<tr><td class="name back"><a href="../index.html">'
+    '..</a></td><td class="size">&nbsp;</td><td class="date">&nbsp;</td></tr>'
+)
+HTML_DIR = (
+    '<tr><td class="name dir"><a href="%(file_name)s/index.html">'
+    '%(file_name)s</a></td><td class="size">&nbsp;</td>'
+    '<td class="date" sort="%(file_time_sort)s">%(file_time)s</td></tr>\n'
+)
+HTML_FILE = (
+    '<tr><td class="name file%(file_type)s"><a href="%(file_name)s">'
+    '%(file_name)s</a></td><td class="size" sort="%(file_size_sort)s">'
+    '%(file_size)s</td><td class="date" sort="%(file_time_sort)s">'
+    '%(file_time)s</td></tr>\n'
+)
 HTML_TABLE_END = '''
     </tbody>
 </table>
-<div id="dropbox-index-footer">Generated on <strong>%s</strong> using <a href="%s">Dropbox-index</a>-%s</a></div>'''
+<div id="dropbox-index-footer">Generated on <strong>%s</strong> using
+<a href="%s">Dropbox-index</a>-%s</a></div>'''
 HTML_DIR_INFO = '''
 <div id="dropbox-index-dir-info">
 %(DIR_INFO)s
