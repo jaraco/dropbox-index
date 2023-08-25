@@ -21,7 +21,7 @@ TABLE_HEADERS = {
     'pl_PL': ('Nazwa', 'Rozmiar', 'Czas modyfikacji'),
 }
 
-SCRIPT_WWW = 'http://code.google.com/p/kosciak-misc/wiki/DropboxIndex'
+SCRIPT_WWW = 'https://pypi.org/project/dropbox-index'
 
 FILES_URL = 'http://dl.dropbox.com/u/69843/dropbox-index'
 
