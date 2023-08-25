@@ -19,8 +19,10 @@ LANG, ENCODING = locale.getlocale()
 
 DATE_FORMAT = '%Y-%m-%d&nbsp;%H:%M:%S'
 
-TABLE_HEADERS = {'en_GB': ('Name', 'Size', 'Last Modified'),
-                 'pl_PL': ('Nazwa', 'Rozmiar', 'Czas modyfikacji')}
+TABLE_HEADERS = {
+    'en_GB': ('Name', 'Size', 'Last Modified'),
+    'pl_PL': ('Nazwa', 'Rozmiar', 'Czas modyfikacji'),
+}
 
 SCRIPT_WWW = 'http://code.google.com/p/kosciak-misc/wiki/DropboxIndex'
 
@@ -46,28 +48,132 @@ ICONS = (
     '%s/icons/application.png' % FILES_URL,
     '%s/icons/plugin.png' % FILES_URL,
     '%s/icons/iso.png' % FILES_URL,
-    )
+)
 
 FILE_TYPES = {
-    ('gif', 'jpg', 'jpeg', 'png', 'bmp', 'tif', 'tiff', 'raw', 'img', 'ico', ): 'image',
-    ('avi', 'ram', 'mpg', 'mpeg', 'mov', 'asf', 'wmv', 'asx', 'ogm', 'vob', '3gp', ): 'video',
-    ('mp3', 'ogg', 'mpc', 'wav', 'wave', 'flac', 'shn', 'ape', 'mid', 'midi', 'wma', 'rm', 'aac', 'mka', ): 'music',
-    ('tar', 'bz2', 'gz', 'arj', 'rar', 'zip', '7z', ): 'archive',
-    ('deb', 'rpm', 'pkg', 'jar', 'war', 'ear', ): 'package',
-    ('pdf', ): 'pdf',
-    ('txt', ): 'txt',
-    ('html', 'htm', 'xml', 'css', 'rss', 'yaml', 'php', 'php3', 'php4', 'php5', ): 'markup',
-    ('js', 'py', 'pl', 'java', 'c', 'h', 'cpp', 'hpp', 'sql', ): 'code',
-    ('ttf', 'otf', 'fnt', ): 'font',
-    ('doc', 'rtf', 'odt', 'abw', 'docx', 'sxw', ): 'document',
-    ('xls', 'ods', 'csv', 'sdc', 'xlsx', ): 'spreadsheet',
-    ('ppt', 'odp', 'pptx', ): 'presentation',
-    ('exe', 'msi', 'bin', 'dmg', ): 'application',
-    ('xpi', ): 'plugin',
-    ('iso', 'nrg', ): 'iso',
-    }
+    (
+        'gif',
+        'jpg',
+        'jpeg',
+        'png',
+        'bmp',
+        'tif',
+        'tiff',
+        'raw',
+        'img',
+        'ico',
+    ): 'image',
+    (
+        'avi',
+        'ram',
+        'mpg',
+        'mpeg',
+        'mov',
+        'asf',
+        'wmv',
+        'asx',
+        'ogm',
+        'vob',
+        '3gp',
+    ): 'video',
+    (
+        'mp3',
+        'ogg',
+        'mpc',
+        'wav',
+        'wave',
+        'flac',
+        'shn',
+        'ape',
+        'mid',
+        'midi',
+        'wma',
+        'rm',
+        'aac',
+        'mka',
+    ): 'music',
+    (
+        'tar',
+        'bz2',
+        'gz',
+        'arj',
+        'rar',
+        'zip',
+        '7z',
+    ): 'archive',
+    (
+        'deb',
+        'rpm',
+        'pkg',
+        'jar',
+        'war',
+        'ear',
+    ): 'package',
+    ('pdf',): 'pdf',
+    ('txt',): 'txt',
+    (
+        'html',
+        'htm',
+        'xml',
+        'css',
+        'rss',
+        'yaml',
+        'php',
+        'php3',
+        'php4',
+        'php5',
+    ): 'markup',
+    (
+        'js',
+        'py',
+        'pl',
+        'java',
+        'c',
+        'h',
+        'cpp',
+        'hpp',
+        'sql',
+    ): 'code',
+    (
+        'ttf',
+        'otf',
+        'fnt',
+    ): 'font',
+    (
+        'doc',
+        'rtf',
+        'odt',
+        'abw',
+        'docx',
+        'sxw',
+    ): 'document',
+    (
+        'xls',
+        'ods',
+        'csv',
+        'sdc',
+        'xlsx',
+    ): 'spreadsheet',
+    (
+        'ppt',
+        'odp',
+        'pptx',
+    ): 'presentation',
+    (
+        'exe',
+        'msi',
+        'bin',
+        'dmg',
+    ): 'application',
+    ('xpi',): 'plugin',
+    (
+        'iso',
+        'nrg',
+    ): 'iso',
+}
 
-HTML_STYLE = '''
+HTML_STYLE = (
+    '''
     <style>
         body { font-family: Verdana, sans-serif; font-size: 12px;}
         a { text-decoration: none; color: #00A; }
@@ -108,7 +214,9 @@ HTML_STYLE = '''
         .application { background-image: url('%s'); }
         .plugin { background-image: url('%s'); }
         .iso { background-image: url('%s'); }
-    </style>''' % ICONS
+    </style>'''
+    % ICONS
+)
 
 HTML_JAVASCRIPT = '''
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
@@ -163,7 +271,10 @@ HTML_JAVASCRIPT = '''
     $(document).ready(function(){
         prepare();
     });
-</script>''' % (FILES_URL, FILES_URL)
+</script>''' % (
+    FILES_URL,
+    FILES_URL,
+)
 
 FAVICON = '<link rel="shortcut icon" href="%s/icons/favicon.ico"/>' % FILES_URL
 
@@ -215,6 +326,7 @@ def get_size(file):
     size = os.path.getsize(file)
 
     return size_text(size)
+
 
 def size_text(size):
     """
@@ -296,7 +408,7 @@ def html_render(path, back, dirs, files, template_file=None):
     if template_file:
         global DIR_INFO
         DIR_INFO = dir_info or ''
-        index.write(template[table_start+9:] % globals())
+        index.write(template[table_start + 9 :] % globals())
         DIR_INFO = None
     else:
         index.write(HTML_DIR_INFO % {'DIR_INFO': dir_info or ''})
@@ -313,7 +425,11 @@ def crawl(path, back=None, recursive=False, template_file=None):
         return
 
     # get contents of the directory
-    contents = [os.path.join(path, file) for file in os.listdir(path) if not file.endswith('index.html')]
+    contents = [
+        os.path.join(path, file)
+        for file in os.listdir(path)
+        if not file.endswith('index.html')
+    ]
     # remove hidden files
     # TODO: identify Windows hidden files
     contents = [file for file in contents if not os.path.basename(file).startswith('.')]
@@ -340,28 +456,29 @@ def crawl(path, back=None, recursive=False, template_file=None):
 
 
 def run():
-
     epilog = '''ATTENTION:
 Script will overwrite any existing index.html file(s)!
     '''
 
-    parser = OptionParser(version='%prog ' + __version__,
-                          usage="%prog [options] DIRECTORY",
-                          epilog=epilog)
-    parser.add_option('-R', '--recursive',
-                      action='store_true', default=False,
-                      help='Include subdirectories [default: %default]')
-    parser.add_option('-T', '--template',
-                      help='Use HTML file as template')
+    parser = OptionParser(
+        version='%prog ' + __version__, usage="%prog [options] DIRECTORY", epilog=epilog
+    )
+    parser.add_option(
+        '-R',
+        '--recursive',
+        action='store_true',
+        default=False,
+        help='Include subdirectories [default: %default]',
+    )
+    parser.add_option('-T', '--template', help='Use HTML file as template')
 
     options, args = parser.parse_args()
     if not args:
         parser.print_help()
         sys.exit()
 
-    crawl(path=args[0],
-          recursive=options.recursive,
-          template_file=options.template)
+    crawl(path=args[0], recursive=options.recursive, template_file=options.template)
+
 
 if __name__ == '__main__':
     run()
