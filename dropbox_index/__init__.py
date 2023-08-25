@@ -10,6 +10,8 @@ import locale
 import argparse
 from importlib import metadata
 
+import importlib_resources as resources
+
 
 locale.setlocale(locale.LC_ALL, '')
 LANG, ENCODING = locale.getlocale()
@@ -170,116 +172,22 @@ FILE_TYPES = {
 }
 
 HTML_STYLE = (
-    '''
-    <style>
-        body { font-family: Verdana, sans-serif; font-size: 12px;}
-        a { text-decoration: none; color: #00A; }
-        a:hover { text-decoration: underline; }
-        #dropbox-index-header { padding: 0; margin: 0.5em auto 0.5em 1em; }
-        table#dropbox-index-list {
-            text-align: center; margin: 0 auto 0 1.5em; border-collapse: collapse; }
-        #dropbox-index-list thead { border-bottom: 1px solid #555; }
-        #dropbox-index-list th:hover {
-            cursor: pointer; cursor: hand; background-color: #EEE; }
-        #direction { border: 0; vertical-align: bottom; margin: 0 0.5em;}
-        #dropbox-index-list tbody { border-bottom: 1px solid #555;}
-        #dropbox-index-list tr, th { line-height: 1.7em; min-height: 25px; }
-        #dropbox-index-list tbody tr:hover { background-color: #EEE; }
-        .name { text-align: left; width: 35em; }
-        .name a, thead .name { padding-left: 22px; }
-        .name a { display: block; }
-        .size { text-align: right; width: 7em; padding-right: 1em;}
-        .date { text-align: right; width: 15em; padding-right: 1em;}
-        #dropbox-index-dir-info { margin: 1em auto 0.5em 2em; }
-        #dropbox-index-footer { margin: 1em auto 0.5em 2em; font-size: smaller;}
-        /* Icons */
-        .dir, .back, .file {
-            background-repeat: no-repeat; background-position: 2px 4px;}
-        .back { background-image: url('%s'); }
-        .dir { background-image: url('%s'); }
-        .file { background-image: url('%s'); }
-        .image { background-image: url('%s'); }
-        .video { background-image: url('%s'); }
-        .music { background-image: url('%s'); }
-        .archive { background-image: url('%s'); }
-        .package { background-image: url('%s'); }
-        .pdf { background-image: url('%s'); }
-        .txt { background-image: url('%s'); }
-        .markup { background-image: url('%s'); }
-        .code { background-image: url('%s'); }
-        .font { background-image: url('%s'); }
-        .document { background-image: url('%s'); }
-        .spreadsheet { background-image: url('%s'); }
-        .presentation { background-image: url('%s'); }
-        .application { background-image: url('%s'); }
-        .plugin { background-image: url('%s'); }
-        .iso { background-image: url('%s'); }
-    </style>'''
-    % ICONS
+    resources.files().joinpath('style.html').read_text(encoding='utf-8') % ICONS
 )
 
-HTML_JAVASCRIPT = '''
+
+JAVASCRIPT = (
+    resources.files()
+    .joinpath('logic.js')
+    .read_text(encoding='utf-8')
+    .replace('FILES_URL', FILES_URL)
+)
+HTML_JAVASCRIPT = f"""
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script>
-    function sort() {{
-        column = $(this).attr("class").split(' ')[0];
-        $("#direction").remove();
-        if ($(this).hasClass("desc")) {{
-            $("#dropbox-index-list thead tr th").each(function(i) {{
-                $(this).removeClass("asc").removeClass("desc") }});
-            $(this).addClass("asc");
-            reverse = -1;
-        }} else {{
-            $("#dropbox-index-list thead tr th").each(function(i) {{
-                $(this).removeClass("asc").removeClass("desc") }});
-            $(this).addClass("desc");
-            reverse = 1;
-        }}
-        if (column == "name") {{
-            $(this).append('<img src="{}/icons/'
-                +((reverse == 1) ? 'desc' : 'asc')+'.png" id="direction" />');
-        }} else {{
-            $(this).prepend('<img src="{}/icons/'+((reverse == 1) ? 'desc' : 'asc')
-                +'.png" id="direction" />');
-        }}
-        rows = $("#dropbox-index-list tbody tr").detach()
-        rows.sort(function(a, b) {{
-            result = $(a).data('type') - $(b).data('type')
-            if (result != 0) {{ return result }}
-
-            return (($(a).data(column) < $(b).data(column)) - ($(a).data(column)
-                > $(b).data(column))) * reverse
-
-        }});
-        $("#dropbox-index-list tbody").append(rows);
-    }}
-
-    function prepare() {{
-        $("#dropbox-index-list tbody tr").each(function(i) {{
-            if ($(this).children(".name").hasClass("back")) {{
-                $(this).data('type', 1);
-            }} else if ($(this).children(".name").hasClass("dir")) {{
-                $(this).data('type', 2);
-            }} else {{
-                $(this).data('type', 3);
-            }}
-            $(this).data('name', $(this).children(".name").text().toLowerCase());
-            $(this).data('size', parseInt($(this).children(".size").attr("sort")));
-            $(this).data('date', parseInt($(this).children(".date").attr("sort")));
-        }});
-
-        $("#dropbox-index-list thead tr th").each(function(i) {{
-            $(this).bind('click', sort);
-        }});
-    }}
-
-    $(document).ready(function(){{
-        prepare();
-    }});
-</script>'''.format(
-    FILES_URL,
-    FILES_URL,
-)
+    {JAVASCRIPT}
+    </script>
+    """
 
 FAVICON = '<link rel="shortcut icon" href="%s/icons/favicon.ico"/>' % FILES_URL
 
