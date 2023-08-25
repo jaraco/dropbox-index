@@ -4,12 +4,10 @@ famfamfam's "Silk" icon set - http://www.famfamfam.com/lab/icons/silk/
 """
 
 
-import sys
 import os
 import time
 import locale
-from optparse import OptionParser
-
+import argparse
 
 __version__ = "TODO"
 
@@ -480,24 +478,19 @@ def run():
 Script will overwrite any existing index.html file(s)!
     '''
 
-    parser = OptionParser(
-        version='%prog ' + __version__, usage="%prog [options] DIRECTORY", epilog=epilog
-    )
-    parser.add_option(
+    parser = argparse.ArgumentParser(epilog=epilog)
+    parser.add_argument(
         '-R',
         '--recursive',
         action='store_true',
         default=False,
-        help='Include subdirectories [default: %default]',
+        help='Include subdirectories',
     )
-    parser.add_option('-T', '--template', help='Use HTML file as template')
+    parser.add_argument('-T', '--template', help='Use HTML file as template')
+    parser.add_argument('path', metavar='DIRECTORY')
 
-    options, args = parser.parse_args()
-    if not args:
-        parser.print_help()
-        sys.exit()
-
-    crawl(path=args[0], recursive=options.recursive, template_file=options.template)
+    args = parser.parse_args()
+    crawl(path=args.path, recursive=args.recursive, template_file=args.template)
 
 
 if __name__ == '__main__':
