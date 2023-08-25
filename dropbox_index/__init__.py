@@ -133,10 +133,7 @@ HTML_END = '''
 
 
 def table_headers():
-    if LANG in TABLE_HEADERS:
-        return TABLE_HEADERS[LANG]
-    else:
-        return TABLE_HEADERS['en_GB']
+    return TABLE_HEADERS.get(LANG, TABLE_HEADERS['en_GB'])
 
 
 def get_size(file):
