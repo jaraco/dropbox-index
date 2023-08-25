@@ -290,7 +290,3 @@ Script will overwrite any existing index.html file(s)!
 
     args = parser.parse_args()
     crawl(path=args.path, recursive=args.recursive, template_file=args.template)
-
-
-if __name__ == '__main__':
-    run()
