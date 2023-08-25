@@ -1,3 +1,13 @@
+v0.6.0
+======
+
+Features
+--------
+
+- Refreshed and modernized the package.
+- Require Python 3.8 or later.
+
+
 0.5.0
 =====
 
