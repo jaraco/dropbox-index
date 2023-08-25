@@ -8,8 +8,8 @@ import os
 import time
 import locale
 import argparse
+from importlib import metadata
 
-__version__ = "TODO"
 
 locale.setlocale(locale.LC_ALL, '')
 LANG, ENCODING = locale.getlocale()
@@ -421,7 +421,7 @@ def html_render(path, back, dirs, files, template_file=None):
         index.write(HTML_FILE % locals())
 
     now = time.strftime(DATE_FORMAT, time.localtime())
-    index.write(HTML_TABLE_END % (now, SCRIPT_WWW, __version__))
+    index.write(HTML_TABLE_END % (now, SCRIPT_WWW, metadata.version('dropbox-index')))
 
     if template_file:
         global DIR_INFO
