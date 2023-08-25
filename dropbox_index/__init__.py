@@ -249,8 +249,7 @@ def crawl(path, back=None, recursive=False, template_file=None):
     contents = [file for file in contents if not os.path.basename(file).startswith('.')]
 
     # get only files
-    files = [file for file in contents if os.path.isfile(file)]
-    files.sort(key=str.lower)
+    files = sorted(filter(os.path.isfile, contents), key=str.lower)
 
     # get only directories
     dirs = sorted(filter(os.path.isdir, contents), key=str.lower) * recursive
