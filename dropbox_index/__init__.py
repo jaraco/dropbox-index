@@ -217,7 +217,7 @@ def _html_render(index, back, dirs, files, template_file=None):
     for file in files:
         file_name = os.path.basename(file)
         if 'dir-info' in file_name:
-            dir_info = open(file).read()
+            dir_info = pathlib.Path(file).read_text(encoding='utf-8')
             continue
         file_type = get_filetype(file_name)
         file_size = get_size(file)
