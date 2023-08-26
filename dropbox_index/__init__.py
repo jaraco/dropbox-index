@@ -1,6 +1,10 @@
 """
 Icons used:
 famfamfam's "Silk" icon set - http://www.famfamfam.com/lab/icons/silk/
+
+>>> target = getfixture('sample_dir')
+>>> crawl(target)
+Created index.html for ...
 """
 
 
