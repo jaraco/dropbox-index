@@ -306,6 +306,6 @@ Script will overwrite any existing index.html file(s)!
     return parser
 
 
-def run():
+def run():  # pragma: no cover
     args = parser().parse_args()
     crawl(path=args.path, recursive=args.recursive, template_file=args.template)
