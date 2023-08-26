@@ -15,3 +15,14 @@ def sample_dir(tmp_path):
         tmp_path,
     )
     return tmp_path
+
+
+@pytest.fixture
+def template_file(tmp_path):
+    path.build(
+        {
+            'template.html': '<html><head></head><body>my template</body></html>',
+        },
+        tmp_path,
+    )
+    return tmp_path / 'template.html'

@@ -5,6 +5,8 @@ famfamfam's "Silk" icon set - http://www.famfamfam.com/lab/icons/silk/
 >>> target = getfixture('sample_dir')
 >>> crawl(target)
 Created index.html for ...
+>>> crawl(target, template_file=getfixture('template_file'))
+Created index.html for ...
 """
 
 
@@ -183,7 +185,7 @@ def html_render(path, back, dirs, files, template_file=None):
     PATH = os.path.basename(os.path.realpath(path))
 
     with open(os.path.join(path, 'index.html'), 'w', encoding='utf-8') as index:
-        _html_render(index, back, dirs, files, template_file=None)
+        _html_render(index, back, dirs, files, template_file=template_file)
 
 
 def _html_render(index, back, dirs, files, template_file=None):
