@@ -270,7 +270,12 @@ def crawl(path, back=None, recursive=False, template_file=None):
         crawl(dir, path, recursive, template_file)
 
 
-def run():
+def parser():
+    """
+    >>> args = parser().parse_args(['dir'])
+    >>> args.path
+    'dir'
+    """
     epilog = '''ATTENTION:
 Script will overwrite any existing index.html file(s)!
     '''
@@ -286,5 +291,9 @@ Script will overwrite any existing index.html file(s)!
     parser.add_argument('-T', '--template', help='Use HTML file as template')
     parser.add_argument('path', metavar='DIRECTORY')
 
-    args = parser.parse_args()
+    return parser
+
+
+def run():
+    args = parser().parse_args()
     crawl(path=args.path, recursive=args.recursive, template_file=args.template)
