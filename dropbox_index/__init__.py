@@ -15,6 +15,7 @@ import os.path
 import re
 import time
 import locale
+import pathlib
 import argparse
 from importlib import metadata
 
@@ -190,7 +191,7 @@ def html_render(path, back, dirs, files, template_file=None):
 
 def _html_render(index, back, dirs, files, template_file=None):
     if template_file:
-        template = open(template_file).read()
+        template = pathlib.Path(template_file).read_text(encoding='utf-8')
         head_start = template.find('<head>') + 6
         table_start = template.find('%(FILES)s')
         index.write(template[0:head_start] % globals())
