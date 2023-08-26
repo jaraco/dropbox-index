@@ -3,7 +3,7 @@ Icons used:
 famfamfam's "Silk" icon set - http://www.famfamfam.com/lab/icons/silk/
 
 >>> target = getfixture('sample_dir')
->>> crawl(target)
+>>> crawl(target, recursive=True)
 Created index.html for ...
 >>> crawl(target, template_file=getfixture('template_file'))
 Created index.html for ...
