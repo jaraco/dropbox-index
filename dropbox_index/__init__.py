@@ -182,8 +182,11 @@ def html_render(path, back, dirs, files, template_file=None):
     global PATH
     PATH = os.path.basename(os.path.realpath(path))
 
-    index = open(os.path.join(path, 'index.html'), 'w')
+    with open(os.path.join(path, 'index.html'), 'w', encoding='utf-8') as index:
+        _html_render(index, back, dirs, files, template_file=None)
 
+
+def _html_render(index, back, dirs, files, template_file=None):
     if template_file:
         template = open(template_file).read()
         head_start = template.find('<head>') + 6
