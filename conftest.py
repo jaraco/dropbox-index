@@ -10,6 +10,7 @@ def sample_dir(tmp_path):
             'foo.png': b'<imagine image data here>',
             'subdir': {
                 'bar.txt': 'other text',
+                'dir-info': '<span>some dir info</span>',
             },
         },
         tmp_path,
