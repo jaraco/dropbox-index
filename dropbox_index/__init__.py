@@ -240,8 +240,17 @@ def _html_render(index, back, dirs, files, template_file=None):
 
 
 def crawl(path, back=None, recursive=False, template_file=None):
+    """
+    >>> tmp_path = getfixture('tmp_path')
+    >>> crawl(tmp_path / 'foo')
+    ERROR: Path ...foo does not exist
+
+    >>> sample_dir = getfixture('sample_dir')
+    >>> crawl(sample_dir / 'foo.txt')
+    ERROR: Path ...foo.txt is not a directory
+    """
     if not os.path.exists(path):
-        print('ERROR: Path %s does not exists' % path)
+        print('ERROR: Path %s does not exist' % path)
         return
 
     if not os.path.isdir(path):
