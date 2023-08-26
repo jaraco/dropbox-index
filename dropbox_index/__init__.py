@@ -243,10 +243,9 @@ def crawl(path, back=None, recursive=False, template_file=None):
         os.path.join(path, file)
         for file in os.listdir(path)
         if not file.endswith('index.html')
+        # exclude "hidden" files
+        and not file.startswith('.')
     ]
-    # remove hidden files
-    # TODO: identify Windows hidden files
-    contents = [file for file in contents if not os.path.basename(file).startswith('.')]
 
     # get only files
     files = sorted(filter(os.path.isfile, contents), key=str.lower)
