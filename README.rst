@@ -3,7 +3,7 @@
 
 .. image:: https://img.shields.io/pypi/pyversions/dropbox-index.svg
 
-.. image:: https://github.com/jaraco/dropbox-index/workflows/tests/badge.svg
+.. image:: https://github.com/jaraco/dropbox-index/actions/workflows/main.yml/badge.svg
    :target: https://github.com/jaraco/dropbox-index/actions?query=workflow%3A%22tests%22
    :alt: tests
 
