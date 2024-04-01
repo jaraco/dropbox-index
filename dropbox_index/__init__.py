@@ -9,17 +9,16 @@ Created index.html for ...
 Created index.html for ...
 """
 
+import argparse
+import locale
 import os
 import os.path
+import pathlib
 import re
 import time
-import locale
-import pathlib
-import argparse
 from importlib import metadata
 
 import importlib_resources as resources
-
 
 locale.setlocale(locale.LC_ALL, '')
 LANG, ENCODING = locale.getlocale()
