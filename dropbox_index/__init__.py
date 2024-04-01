@@ -34,34 +34,7 @@ SCRIPT_WWW = 'https://pypi.org/project/dropbox-index'
 
 FILES_URL = 'http://dl.dropbox.com/u/69843/dropbox-index'
 
-
-def _make_icon(name):
-    return f'{FILES_URL}/icons/{name}.png'
-
-
-_icon_names = (
-    'back',
-    'folder',
-    'file',
-    'image',
-    'video',
-    'music',
-    'archive',
-    'package',
-    'pdf',
-    'txt',
-    'markup',
-    'code',
-    'font',
-    'document',
-    'spreadsheet',
-    'presentation',
-    'application',
-    'plugin',
-    'iso',
-)
-
-ICONS = tuple(map(_make_icon, _icon_names))
+ICONS_URL = f'{FILES_URL}/icons'
 
 
 def _load_file_types():
@@ -75,7 +48,7 @@ def _load_file_types():
 FILE_TYPES = dict(_load_file_types())
 
 HTML_STYLE = (
-    resources.files().joinpath('style.html').read_text(encoding='utf-8') % ICONS
+    resources.files().joinpath('style.html').read_text(encoding='utf-8') % globals()
 )
 
 
