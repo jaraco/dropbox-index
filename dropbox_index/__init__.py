@@ -35,25 +35,25 @@ SCRIPT_WWW = 'https://pypi.org/project/dropbox-index'
 FILES_URL = 'http://dl.dropbox.com/u/69843/dropbox-index'
 
 ICONS = (
-    '%s/icons/back.png' % FILES_URL,
-    '%s/icons/folder.png' % FILES_URL,
-    '%s/icons/file.png' % FILES_URL,
-    '%s/icons/image.png' % FILES_URL,
-    '%s/icons/video.png' % FILES_URL,
-    '%s/icons/music.png' % FILES_URL,
-    '%s/icons/archive.png' % FILES_URL,
-    '%s/icons/package.png' % FILES_URL,
-    '%s/icons/pdf.png' % FILES_URL,
-    '%s/icons/txt.png' % FILES_URL,
-    '%s/icons/markup.png' % FILES_URL,
-    '%s/icons/code.png' % FILES_URL,
-    '%s/icons/font.png' % FILES_URL,
-    '%s/icons/document.png' % FILES_URL,
-    '%s/icons/spreadsheet.png' % FILES_URL,
-    '%s/icons/presentation.png' % FILES_URL,
-    '%s/icons/application.png' % FILES_URL,
-    '%s/icons/plugin.png' % FILES_URL,
-    '%s/icons/iso.png' % FILES_URL,
+    f'{FILES_URL}/icons/back.png',
+    f'{FILES_URL}/icons/folder.png',
+    f'{FILES_URL}/icons/file.png',
+    f'{FILES_URL}/icons/image.png',
+    f'{FILES_URL}/icons/video.png',
+    f'{FILES_URL}/icons/music.png',
+    f'{FILES_URL}/icons/archive.png',
+    f'{FILES_URL}/icons/package.png',
+    f'{FILES_URL}/icons/pdf.png',
+    f'{FILES_URL}/icons/txt.png',
+    f'{FILES_URL}/icons/markup.png',
+    f'{FILES_URL}/icons/code.png',
+    f'{FILES_URL}/icons/font.png',
+    f'{FILES_URL}/icons/document.png',
+    f'{FILES_URL}/icons/spreadsheet.png',
+    f'{FILES_URL}/icons/presentation.png',
+    f'{FILES_URL}/icons/application.png',
+    f'{FILES_URL}/icons/plugin.png',
+    f'{FILES_URL}/icons/iso.png',
 )
 
 
@@ -85,7 +85,7 @@ HTML_JAVASCRIPT = f"""
     </script>
     """
 
-FAVICON = '<link rel="shortcut icon" href="%s/icons/favicon.ico"/>' % FILES_URL
+FAVICON = f'<link rel="shortcut icon" href="{FILES_URL}/icons/favicon.ico"/>'
 
 HTML_START = '''<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -161,20 +161,20 @@ def size_text(size):
     5.0 MB
     """
     if size < 1000:
-        return '%s bytes' % size
+        return f'{size} bytes'
 
     kilo = size / 1024
     if kilo < 1000:
-        return '%s KB' % round(kilo, 1)
+        return f'{round(kilo, 1)} KB'
 
     mega = kilo / 1024
-    return '%s MB' % round(mega, 1)
+    return f'{round(mega, 1)} MB'
 
 
 def get_filetype(file_name):
     ext = os.path.splitext(file_name)[-1].lower()
     try:
-        return ' %s' % FILE_TYPES[ext]
+        return f' {FILE_TYPES[ext]}'
     except KeyError:
         return ''
 
@@ -248,11 +248,11 @@ def crawl(path, back=None, recursive=False, template_file=None):
     ERROR: Path ...foo.txt is not a directory
     """
     if not os.path.exists(path):
-        print('ERROR: Path %s does not exist' % path)
+        print(f'ERROR: Path {path} does not exist')
         return
 
     if not os.path.isdir(path):
-        print('ERROR: Path %s is not a directory' % path)
+        print(f'ERROR: Path {path} is not a directory')
         return
 
     # get contents of the directory
@@ -273,7 +273,7 @@ def crawl(path, back=None, recursive=False, template_file=None):
     # render directory contents
     html_render(path, back, dirs, files, template_file)
 
-    print('Created index.html for %s' % os.path.realpath(path))
+    print('Created index.html for', os.path.realpath(path))
 
     # crawl subdirectories
     for dir in dirs:
