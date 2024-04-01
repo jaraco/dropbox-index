@@ -34,27 +34,34 @@ SCRIPT_WWW = 'https://pypi.org/project/dropbox-index'
 
 FILES_URL = 'http://dl.dropbox.com/u/69843/dropbox-index'
 
-ICONS = (
-    f'{FILES_URL}/icons/back.png',
-    f'{FILES_URL}/icons/folder.png',
-    f'{FILES_URL}/icons/file.png',
-    f'{FILES_URL}/icons/image.png',
-    f'{FILES_URL}/icons/video.png',
-    f'{FILES_URL}/icons/music.png',
-    f'{FILES_URL}/icons/archive.png',
-    f'{FILES_URL}/icons/package.png',
-    f'{FILES_URL}/icons/pdf.png',
-    f'{FILES_URL}/icons/txt.png',
-    f'{FILES_URL}/icons/markup.png',
-    f'{FILES_URL}/icons/code.png',
-    f'{FILES_URL}/icons/font.png',
-    f'{FILES_URL}/icons/document.png',
-    f'{FILES_URL}/icons/spreadsheet.png',
-    f'{FILES_URL}/icons/presentation.png',
-    f'{FILES_URL}/icons/application.png',
-    f'{FILES_URL}/icons/plugin.png',
-    f'{FILES_URL}/icons/iso.png',
+
+def _make_icon(name):
+    return f'{FILES_URL}/icons/{name}.png'
+
+
+_icon_names = (
+    'back',
+    'folder',
+    'file',
+    'image',
+    'video',
+    'music',
+    'archive',
+    'package',
+    'pdf',
+    'txt',
+    'markup',
+    'code',
+    'font',
+    'document',
+    'spreadsheet',
+    'presentation',
+    'application',
+    'plugin',
+    'iso',
 )
+
+ICONS = tuple(map(_make_icon, _icon_names))
 
 
 def _load_file_types():
