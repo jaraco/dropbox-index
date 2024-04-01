@@ -9,7 +9,6 @@ Created index.html for ...
 Created index.html for ...
 """
 
-
 import os
 import os.path
 import re
