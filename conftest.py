@@ -1,5 +1,5 @@
 import pytest
-from jaraco import path
+from jaraco import path  # type: ignore[import-untyped]
 
 
 @pytest.fixture
