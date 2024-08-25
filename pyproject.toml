@@ -72,4 +72,9 @@ type = [
 [project.scripts]
 dropbox-index = "dropbox_index:run"
 
+
 [tool.setuptools_scm]
+
+
+[tool.pytest-enabler.mypy]
+# Disabled due to jaraco/skeleton#143
