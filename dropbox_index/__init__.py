@@ -53,7 +53,8 @@ HTML_STYLE = (
 
 
 JAVASCRIPT = (
-    resources.files()
+    resources
+    .files()
     .joinpath('logic.js')
     .read_text(encoding='utf-8')
     .replace('FILES_URL', FILES_URL)
